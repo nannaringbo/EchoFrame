@@ -1,10 +1,10 @@
 import { createCamera } from "./components/camera.js";
-import { createScene } from "./system/scene.js";
-import { Resizer } from "./system/resizer.js";
-import { createControls } from "./system/controls.js";
+import { createScene } from "./components/scene.js";
+import { Resizer } from "./systems/resizer.js";
+import { createControls } from "./systems/controls.js";
 import { createText } from "./components/text.js";
-import { createXRRenderer } from "./system/xrRenderer.js";
-import { createController } from "./system/controller.js";
+import { createXRRenderer } from "./systems/xrRenderer.js";
+import { createController } from "./systems/controller.js";
 import { createFloor } from "./components/floor.js";
 import { createARLights } from "./components/arLights.js";
 import { setWorldPosition } from "./components/worldPosition.js";
