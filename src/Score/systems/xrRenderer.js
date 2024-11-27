@@ -12,7 +12,7 @@ function createXRRenderer() {
   document.body.appendChild(
     ARButton.createButton(renderer, {
       requiredFeatures: ["anchors"],
-      optionalFeatures: ["light-estimation", "depth-sensing", "bounded-floor"],
+      optionalFeatures: ["light-estimation", "depth-sensing"],
       depthSensing: {
         usagePreference: ["gpu-optimized"],
         dataFormatPreference: [],

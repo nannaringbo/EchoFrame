@@ -10,7 +10,7 @@ import { createTexture } from "./createTexture.js";
 
 function createCube() {
   // create a geometry
-  const geometry = new BoxGeometry(1, 1, 1);
+  const geometry = new BoxGeometry(0.5, 0.5, 0.5);
 
   //create a default (white) Basic material
   const material = new MeshStandardMaterial(); //For no texture

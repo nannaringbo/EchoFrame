@@ -23,10 +23,10 @@ let controller;
 
 class Score1 {
   constructor(container) {
-    let userHeight = 1.65 * 2;
+    let userHeight = 1.65;
     let groundPosition = 0 - userHeight + 0.2;
-    let roomWidth = 20;
-    let roomDepth = 20;
+    let roomWidth = 10;
+    let roomDepth = 10;
 
     console.log("roomDepth:", roomDepth);
     camera = createCamera();
@@ -42,7 +42,7 @@ class Score1 {
 
     renderer.setAnimationLoop(animate);
 
-    const startingPoint = new Vector3(0, userHeight - 0.2, 0);
+    const startingPoint = new Vector3(0, 0, userHeight - 0.2);
 
     console.log("roomWidth:", roomWidth);
     console.log("roomDepth:", roomDepth);
@@ -67,7 +67,7 @@ class Score1 {
     const cube = createCube();
     scene.add(cube);
     toAnimate.push(cube);
-    const cubeWP = new Vector3(2, groundPosition + 1, 2);
+    const cubeWP = new Vector3(0, groundPosition + userHeight - 0.2, -2);
     setWorldPosition(cube, cubeWP);
     console.log("cube movable:", cube.userData.movable);
     cube.addEventListener("click", () => {
@@ -88,7 +88,7 @@ class Score1 {
     // scene.add(controller);
     // toAnimate.push(controller);
 
-    scene.scale.set(0.5, 0.5, 0.5);
+    //scene.scale.set(0.5, 0.5, 0.5);
     //console.log("scene:", scene);
     //console.log("ground:", ground);
 
