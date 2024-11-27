@@ -88,7 +88,7 @@ class Score1 {
     // scene.add(controller);
     // toAnimate.push(controller);
 
-    //scene.scale.set(0.5, 0.5, 0.5);
+    scene.scale.set(0.5, 0.5, 0.5);
     //console.log("scene:", scene);
     //console.log("ground:", ground);
 
