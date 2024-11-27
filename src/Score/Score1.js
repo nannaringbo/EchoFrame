@@ -75,17 +75,15 @@ class Score1 {
     });
 
     //cube for checking reference space
-    let referenceSpace = renderer.xr.getReferenceSpace();
+    const referenceSpace = renderer.xr.getReferenceSpace();
 
     if (referenceSpace == "unbounded") {
-      const referenceSpaceObject = createCube();
-      referenceSpaceObject.material.color.set("red");
-      scene.add(referenceSpaceObject);
+      cube.material.color.set("red");
     }
     if (referenceSpace == "local") {
-      const referenceSpaceObject = createCube();
-      referenceSpaceObject.material.color.set("blue");
-      scene.add(referenceSpaceObject);
+      cube.material.color.set("green");
+    } else {
+      cube.material.color.set("yellow");
     }
 
     //PickHelper
