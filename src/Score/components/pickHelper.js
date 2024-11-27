@@ -1,4 +1,5 @@
-import { Raycaster, Vector2, Vector3 } from "three";
+//Component created based on the example from https://threejs.org/manual/#en/webxr-look-to-select
+import { Raycaster } from "three";
 
 function createPickHelper(scene, camera) {
   const raycaster = new Raycaster();
