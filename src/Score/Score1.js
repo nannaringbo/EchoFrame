@@ -65,12 +65,11 @@ class Score1 {
     //Define objects
 
     const cube = createCube();
-    cube.position.set(2, groundPosition + 1, -2);
     scene.add(cube);
     toAnimate.push(cube);
-    // const cubeWP = new Vector3(1, groundPosition + 0.5, 1);
-    // setWorldPosition(cube, cubeWP);
-    // console.log("cube movable:", cube.userData.movable);
+    const cubeWP = new Vector3(2, groundPosition + 1, 2);
+    setWorldPosition(cube, cubeWP);
+    console.log("cube movable:", cube.userData.movable);
     cube.addEventListener("click", () => {
       alert("Cube clicked");
     });
