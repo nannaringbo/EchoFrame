@@ -25,8 +25,8 @@ class Score1 {
   constructor(container) {
     let userHeight = 1.65;
     let groundPosition = 0 - userHeight + 0.2;
-    let roomWidth = 10;
-    let roomDepth = 10;
+    let roomWidth = 5;
+    let roomDepth = 5;
 
     console.log("roomDepth:", roomDepth);
     camera = createCamera();
