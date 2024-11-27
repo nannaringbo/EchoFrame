@@ -1,8 +1,14 @@
-import Node, { registerNode } from '../core/Node.js';
+import Node from '../core/Node.js';
 import { expression } from '../code/ExpressionNode.js';
 import { nodeObject, nodeArray } from '../tsl/TSLBase.js';
 
 class LoopNode extends Node {
+
+	static get type() {
+
+		return 'LoopNode';
+
+	}
 
 	constructor( params = [] ) {
 
@@ -96,10 +102,10 @@ class LoopNode extends Node {
 				condition = param.condition;
 				update = param.update;
 
-				if ( typeof start === 'number' ) start = start.toString();
+				if ( typeof start === 'number' ) start = builder.generateConst( type, start );
 				else if ( start && start.isNode ) start = start.build( builder, type );
 
-				if ( typeof end === 'number' ) end = end.toString();
+				if ( typeof end === 'number' ) end = builder.generateConst( type, end );
 				else if ( end && end.isNode ) end = end.build( builder, type );
 
 				if ( start !== undefined && end === undefined ) {
@@ -190,8 +196,6 @@ class LoopNode extends Node {
 }
 
 export default LoopNode;
-
-LoopNode.type = /*@__PURE__*/ registerNode( 'Loop', LoopNode );
 
 export const Loop = ( ...params ) => nodeObject( new LoopNode( nodeArray( params, 'int' ) ) ).append();
 export const Continue = () => expression( 'continue' ).append();

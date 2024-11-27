@@ -1,7 +1,13 @@
-import Node, { registerNode } from './Node.js';
+import Node from './Node.js';
 import { addMethodChaining, nodeProxy } from '../tsl/TSLCore.js';
 
 class VarNode extends Node {
+
+	static get type() {
+
+		return 'VarNode';
+
+	}
 
 	constructor( node, name = null ) {
 
@@ -38,7 +44,7 @@ class VarNode extends Node {
 
 		const snippet = node.build( builder, nodeVar.type );
 
-		builder.addLineFlowCode( `${propertyName} = ${snippet}` );
+		builder.addLineFlowCode( `${propertyName} = ${snippet}`, this );
 
 		return propertyName;
 
@@ -48,9 +54,19 @@ class VarNode extends Node {
 
 export default VarNode;
 
-VarNode.type = /*@__PURE__*/ registerNode( 'Var', VarNode );
+const createVar = /*@__PURE__*/ nodeProxy( VarNode );
 
-export const temp = /*@__PURE__*/ nodeProxy( VarNode );
+addMethodChaining( 'toVar', ( ...params ) => createVar( ...params ).append() );
 
-addMethodChaining( 'temp', temp ); // @TODO: Will be removed in the future
-addMethodChaining( 'toVar', ( ...params ) => temp( ...params ).append() );
+// Deprecated
+
+export const temp = ( node ) => { // @deprecated, r170
+
+	console.warn( 'TSL: "temp" is deprecated. Use ".toVar()" instead.' );
+
+	return createVar( node );
+
+};
+
+addMethodChaining( 'temp', temp );
+

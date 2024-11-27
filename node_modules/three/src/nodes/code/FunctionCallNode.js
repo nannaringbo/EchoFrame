@@ -1,8 +1,13 @@
-import { registerNode } from '../core/Node.js';
 import TempNode from '../core/TempNode.js';
 import { addMethodChaining, nodeArray, nodeObject, nodeObjects } from '../tsl/TSLCore.js';
 
 class FunctionCallNode extends TempNode {
+
+	static get type() {
+
+		return 'FunctionCallNode';
+
+	}
 
 	constructor( functionNode = null, parameters = {} ) {
 
@@ -42,14 +47,25 @@ class FunctionCallNode extends TempNode {
 		const inputs = functionNode.getInputs( builder );
 		const parameters = this.parameters;
 
+		const generateInput = ( node, inputNode ) => {
+
+			const type = inputNode.type;
+			const pointer = type === 'pointer';
+
+			let output;
+
+			if ( pointer ) output = '&' + node.build( builder );
+			else output = node.build( builder, type );
+
+			return output;
+
+		};
+
 		if ( Array.isArray( parameters ) ) {
 
 			for ( let i = 0; i < parameters.length; i ++ ) {
 
-				const inputNode = inputs[ i ];
-				const node = parameters[ i ];
-
-				params.push( node.build( builder, inputNode.type ) );
+				params.push( generateInput( parameters[ i ], inputs[ i ] ) );
 
 			}
 
@@ -61,7 +77,7 @@ class FunctionCallNode extends TempNode {
 
 				if ( node !== undefined ) {
 
-					params.push( node.build( builder, inputNode.type ) );
+					params.push( generateInput( node, inputNode ) );
 
 				} else {
 
@@ -82,8 +98,6 @@ class FunctionCallNode extends TempNode {
 }
 
 export default FunctionCallNode;
-
-FunctionCallNode.type = /*@__PURE__*/ registerNode( 'FunctionCall', FunctionCallNode );
 
 export const call = ( func, ...params ) => {
 

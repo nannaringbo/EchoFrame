@@ -1,8 +1,14 @@
-import Node, { registerNode } from '../core/Node.js';
+import Node from '../core/Node.js';
 import { NodeUpdateType } from '../core/constants.js';
 import { addMethodChaining, nodeObject } from '../tsl/TSLCore.js';
 
 class ComputeNode extends Node {
+
+	static get type() {
+
+		return 'ComputeNode';
+
+	}
 
 	constructor( computeNode, count, workgroupSize = [ 64 ] ) {
 
@@ -18,6 +24,8 @@ class ComputeNode extends Node {
 
 		this.version = 1;
 		this.updateBeforeType = NodeUpdateType.OBJECT;
+
+		this.onInitFunction = null;
 
 		this.updateDispatchCount();
 
@@ -48,7 +56,13 @@ class ComputeNode extends Node {
 
 	}
 
-	onInit() { }
+	onInit( callback ) {
+
+		this.onInitFunction = callback;
+
+		return this;
+
+	}
 
 	updateBefore( { renderer } ) {
 
@@ -66,7 +80,7 @@ class ComputeNode extends Node {
 
 			if ( snippet !== '' ) {
 
-				builder.addLineFlowCode( snippet );
+				builder.addLineFlowCode( snippet, this );
 
 			}
 
@@ -77,8 +91,6 @@ class ComputeNode extends Node {
 }
 
 export default ComputeNode;
-
-ComputeNode.type = /*@__PURE__*/ registerNode( 'Compute', ComputeNode );
 
 export const compute = ( node, count, workgroupSize ) => nodeObject( new ComputeNode( nodeObject( node ), count, workgroupSize ) );
 

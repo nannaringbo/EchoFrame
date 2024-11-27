@@ -1,6 +1,7 @@
-import Node, { registerNode } from '../core/Node.js';
+import Node from '../core/Node.js';
 import { scriptableValue } from './ScriptableValueNode.js';
 import { nodeProxy, float } from '../tsl/TSLBase.js';
+import { hashArray, hashString } from '../core/NodeUtils.js';
 
 class Resources extends Map {
 
@@ -57,9 +58,15 @@ class Parameters {
 
 }
 
-export const global = new Resources();
+export const ScriptableNodeResources = new Resources();
 
 class ScriptableNode extends Node {
+
+	static get type() {
+
+		return 'ScriptableNode';
+
+	}
 
 	constructor( codeNode = null, parameters = {} ) {
 
@@ -292,11 +299,11 @@ class ScriptableNode extends Node {
 
 		const parameters = new Parameters( this );
 
-		const THREE = global.get( 'THREE' );
-		const TSL = global.get( 'TSL' );
+		const THREE = ScriptableNodeResources.get( 'THREE' );
+		const TSL = ScriptableNodeResources.get( 'TSL' );
 
 		const method = this.getMethod( this.codeNode );
-		const params = [ parameters, this._local, global, refresh, setOutput, THREE, TSL ];
+		const params = [ parameters, this._local, ScriptableNodeResources, refresh, setOutput, THREE, TSL ];
 
 		this._object = method( ...params );
 
@@ -439,15 +446,15 @@ class ScriptableNode extends Node {
 
 	getCacheKey( force ) {
 
-		const cacheKey = [ this.source, this.getDefaultOutputNode().getCacheKey( force ) ];
+		const values = [ hashString( this.source ), this.getDefaultOutputNode().getCacheKey( force ) ];
 
 		for ( const param in this.parameters ) {
 
-			cacheKey.push( this.parameters[ param ].getCacheKey( force ) );
+			values.push( this.parameters[ param ].getCacheKey( force ) );
 
 		}
 
-		return cacheKey.join( ',' );
+		return hashArray( values );
 
 	}
 
@@ -494,7 +501,5 @@ class ScriptableNode extends Node {
 }
 
 export default ScriptableNode;
-
-ScriptableNode.type = /*@__PURE__*/ registerNode( 'Scriptable', ScriptableNode );
 
 export const scriptable = /*@__PURE__*/ nodeProxy( ScriptableNode );

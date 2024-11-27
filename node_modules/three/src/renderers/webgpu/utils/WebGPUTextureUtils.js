@@ -65,8 +65,16 @@ class WebGPUTextureUtils {
 			magFilter: this._convertFilterMode( texture.magFilter ),
 			minFilter: this._convertFilterMode( texture.minFilter ),
 			mipmapFilter: this._convertFilterMode( texture.minFilter ),
-			maxAnisotropy: texture.anisotropy
+			maxAnisotropy: 1
 		};
+
+		// anisotropy can only be used when all filter modes are set to linear.
+
+		if ( samplerDescriptorGPU.magFilter === GPUFilterMode.Linear && samplerDescriptorGPU.minFilter === GPUFilterMode.Linear && samplerDescriptorGPU.mipmapFilter === GPUFilterMode.Linear ) {
+
+			samplerDescriptorGPU.maxAnisotropy = texture.anisotropy;
+
+		}
 
 		if ( texture.isDepthTexture && texture.compareFunction !== null ) {
 
@@ -119,8 +127,24 @@ class WebGPUTextureUtils {
 
 		const { width, height, depth, levels } = options;
 
+		if ( texture.isFramebufferTexture ) {
+
+			if ( options.renderTarget ) {
+
+				options.format = this.backend.utils.getCurrentColorFormat( options.renderTarget );
+
+			} else {
+
+				options.format = this.backend.utils.getPreferredCanvasFormat();
+
+			}
+
+		}
+
 		const dimension = this._getDimension( texture );
 		const format = texture.internalFormat || options.format || getFormat( texture, backend.device );
+
+		textureData.format = format;
 
 		let sampleCount = options.sampleCount !== undefined ? options.sampleCount : 1;
 
@@ -369,7 +393,7 @@ class WebGPUTextureUtils {
 
 	}
 
-	async copyTextureToBuffer( texture, x, y, width, height ) {
+	async copyTextureToBuffer( texture, x, y, width, height, faceIndex ) {
 
 		const device = this.backend.device;
 
@@ -393,7 +417,7 @@ class WebGPUTextureUtils {
 		encoder.copyTextureToBuffer(
 			{
 				texture: textureGPU,
-				origin: { x, y },
+				origin: { x, y, z: faceIndex },
 			},
 			{
 				buffer: readBuffer,
@@ -792,9 +816,9 @@ class WebGPUTextureUtils {
 		if ( format === GPUTextureFormat.RG16Sint ) return Int16Array;
 		if ( format === GPUTextureFormat.RGBA16Uint ) return Uint16Array;
 		if ( format === GPUTextureFormat.RGBA16Sint ) return Int16Array;
-		if ( format === GPUTextureFormat.R16Float ) return Float32Array;
-		if ( format === GPUTextureFormat.RG16Float ) return Float32Array;
-		if ( format === GPUTextureFormat.RGBA16Float ) return Float32Array;
+		if ( format === GPUTextureFormat.R16Float ) return Uint16Array;
+		if ( format === GPUTextureFormat.RG16Float ) return Uint16Array;
+		if ( format === GPUTextureFormat.RGBA16Float ) return Uint16Array;
 
 
 		if ( format === GPUTextureFormat.R32Uint ) return Uint32Array;
@@ -848,11 +872,7 @@ export function getFormat( texture, device = null ) {
 
 	let formatGPU;
 
-	if ( texture.isFramebufferTexture === true && texture.type === UnsignedByteType ) {
-
-		formatGPU = GPUTextureFormat.BGRA8Unorm;
-
-	} else if ( texture.isCompressedTexture === true || texture.isCompressedArrayTexture === true ) {
+	if ( texture.isCompressedTexture === true || texture.isCompressedArrayTexture === true ) {
 
 		switch ( format ) {
 
