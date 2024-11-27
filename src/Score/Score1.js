@@ -74,6 +74,20 @@ class Score1 {
       alert("Cube clicked");
     });
 
+    //cube for checking reference space
+    let referenceSpace = renderer.xr.getReferenceSpace();
+
+    if (referenceSpace == "unbounded") {
+      const referenceSpaceObject = createCube();
+      referenceSpaceObject.material.color.set("red");
+      scene.add(referenceSpaceObject);
+    }
+    if (referenceSpace == "local") {
+      const referenceSpaceObject = createCube();
+      referenceSpaceObject.material.color.set("blue");
+      scene.add(referenceSpaceObject);
+    }
+
     //PickHelper
 
     const pickHelper = createPickHelper(scene, camera);
@@ -103,6 +117,7 @@ function onWindowResize() {
 }
 function animate(time) {
   time *= 0.001;
+
   if (toAnimate.length > 0) {
     for (let i = 0; i < toAnimate.length; i++) {
       toAnimate[i].animate();
