@@ -78,10 +78,10 @@ class Score1 {
     const referenceSpace = renderer.xr.getReferenceSpace();
 
     if (referenceSpace == "unbounded") {
-      cube.material.color.set("red");
+      cube.material.color.set("green");
     }
     if (referenceSpace == "local") {
-      cube.material.color.set("green");
+      cube.material.color.set("purple");
     } else {
       cube.material.color.set("yellow");
     }
