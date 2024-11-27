@@ -74,18 +74,6 @@ class Score1 {
       alert("Cube clicked");
     });
 
-    //cube for checking reference space
-    const referenceSpace = renderer.xr.getReferenceSpace();
-
-    if (referenceSpace == "unbounded") {
-      cube.material.color.set("green");
-    }
-    if (referenceSpace == "local") {
-      cube.material.color.set("purple");
-    } else {
-      cube.material.color.set("yellow");
-    }
-
     //PickHelper
 
     const pickHelper = createPickHelper(scene, camera);
