@@ -17,7 +17,7 @@ function uploadTiff(roomWidth, roomDepth, filePath) {
     roomDepth,
     roomWidth - 1,
     roomDepth - 1
-  ); //change first two parameters to change size of plane. TODO: change these for AR
+  );
   geometry.rotateX(-Math.PI / 2);
 
   const mesh = new Mesh(geometry);

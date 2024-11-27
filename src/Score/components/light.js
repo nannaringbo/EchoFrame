@@ -9,7 +9,7 @@ function createLights() {
   // move the light right, up, and towards us
   mainLight.position.set(3, 5, 3);
 
-  return ambientLight;
+  return mainLight;
 }
 
 export { createLights };

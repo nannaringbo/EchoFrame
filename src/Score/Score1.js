@@ -1,6 +1,6 @@
 import { createCamera } from "./components/camera.js";
 import { createScene } from "./components/scene.js";
-import { Resizer } from "./systems/resizer.js";
+import { Resizer } from "./systems/resizer(NOTINUSE).js";
 import { createControls } from "./systems/controls.js";
 import { createText } from "./components/text.js";
 import { createXRRenderer } from "./systems/xrRenderer.js";
@@ -11,8 +11,9 @@ import { setWorldPosition } from "./components/worldPosition.js";
 import { createCube } from "./components/cube.js";
 import { createParticles } from "./components/particles.js";
 import { createLights } from "./components/light.js";
+import { createPickHelper } from "./components/pickHelper.js";
 
-import { Vector3 } from "three";
+import { Vector3, GridHelper } from "three";
 
 let camera;
 let renderer;
@@ -53,9 +54,13 @@ class Score1 {
     console.log("renderer", renderer);
 
     //AR lights
-    const arLight = createARLights(scene, renderer);
-    scene.add(arLight);
-    console.log("arLight movable:", arLight.userData.movable);
+    // const arLight = createARLights(scene, renderer);
+    // scene.add(arLight);
+    // console.log("arLight movable:", arLight.userData.movable);
+
+    //Lights
+    const lights = createLights();
+    scene.add(lights);
 
     //Define objects
 
@@ -69,16 +74,17 @@ class Score1 {
       alert("Cube clicked");
     });
 
-    // Helpers
+    //PickHelper
 
+    const pickHelper = createPickHelper(scene, camera);
+    toAnimate.push(pickHelper);
+    // Helpers
     // const gridHelper = new GridHelper(roomDepth, roomDepth);
     // gridHelper.position.y = groundPosition;
     // scene.add(gridHelper);
 
-    const resizer = new Resizer(container, camera, renderer);
-
     //AR controller
-    // controller = createController(renderer, particles);
+    // controller = createController(renderer, scene);
     // scene.add(controller);
     // toAnimate.push(controller);
 
@@ -86,18 +92,23 @@ class Score1 {
     //console.log("scene:", scene);
     //console.log("ground:", ground);
 
-    function animate() {
-      //put all logic for animation here
-
-      //   const referenceSpace = renderer.xr.getReferenceSpace(); // TODO: use this for AR
-      //   const session = renderer.xr.getSession(); //TODO: use this for AR
-      for (const object of toAnimate) {
-        object.animate();
-      }
-
-      renderer.render(scene, camera);
-    }
+    window.addEventListener("resize", onWindowResize);
   }
 }
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
 
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+function animate(time) {
+  time *= 0.001;
+  if (toAnimate.length > 0) {
+    for (let i = 0; i < toAnimate.length; i++) {
+      toAnimate[i].animate();
+    }
+  }
+
+  renderer.render(scene, camera);
+}
 export { Score1 };

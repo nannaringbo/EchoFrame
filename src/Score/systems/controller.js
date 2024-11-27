@@ -1,7 +1,7 @@
 import { Vector3, Raycaster, BufferGeometry, Line } from "three";
 import { XRControllerModelFactory } from "three/examples/jsm/webxr/XRControllerModelFactory.js";
 
-function createController(renderer, particlesGroup) {
+function createController(renderer, scene) {
   let controller;
   const raycaster = new Raycaster();
   let intersected = [];
@@ -44,9 +44,8 @@ function createController(renderer, particlesGroup) {
     controller.updateMatrixWorld();
     raycaster.setFromCamera({ x: 0, y: 0 }, renderer.xr.getCamera());
 
-    // Perform raycasting with the particles group
     const movableObjects = raycaster
-      .intersectObjects(particlesGroup.children, true)
+      .intersectObjects(scene.children, true)
       .filter((intersection) => intersection.object.userData.movable);
 
     return movableObjects;

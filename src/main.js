@@ -6,6 +6,29 @@ import { Score3 } from "./Score/Score3";
 import "/src/styles.css";
 
 function main() {
+  const landingPage = createLandingPage();
+}
+
+main();
+
+function Button({ text, onClick }) {
+  const button = document.createElement("button");
+  button.textContent = text;
+  button.style.backgroundColor = "#FAEBD7";
+  button.style.padding = "40px 70px";
+  button.style.margin = "100px 20px";
+  button.style.fontSize = "30px";
+  button.style.color = "#6495ED";
+  button.style.border = "2px solid #6495ED";
+  button.style.borderRadius = "5px";
+  button.style.cursor = "pointer";
+
+  button.addEventListener("click", onClick);
+
+  return button;
+}
+
+function createLandingPage() {
   // Get a reference to the container element
   const container = document.querySelector("#scene-container");
 
@@ -42,23 +65,4 @@ function main() {
   container.appendChild(button1);
   container.appendChild(button2);
   container.appendChild(button3);
-}
-
-main();
-
-function Button({ text, onClick }) {
-  const button = document.createElement("button");
-  button.textContent = text;
-  button.style.backgroundColor = "#FAEBD7";
-  button.style.padding = "40px 70px";
-  button.style.margin = "100px 20px";
-  button.style.fontSize = "30px";
-  button.style.color = "#6495ED";
-  button.style.border = "2px solid #6495ED";
-  button.style.borderRadius = "5px";
-  button.style.cursor = "pointer";
-
-  button.addEventListener("click", onClick);
-
-  return button;
 }

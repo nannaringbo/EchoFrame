@@ -1,6 +1,6 @@
 import { createCamera } from "./components/camera.js";
 import { createScene } from "./components/scene.js";
-import { Resizer } from "./systems/resizer.js";
+import { Resizer } from "./systems/resizer(NOTINUSE).js";
 import { createControls } from "./systems/controls.js";
 import { createText } from "./components/text.js";
 import { createXRRenderer } from "./systems/xrRenderer.js";
@@ -59,12 +59,15 @@ class Score {
 
     //Define objects
 
-    // const cube = createCube();
-    // scene.add(cube);
-    // toAnimate.push(cube);
-    // const cubeWP = new Vector3(1, groundPosition + 0.5, 1);
-    // setWorldPosition(cube, cubeWP);
-    // console.log("cube movable:", cube.userData.movable);
+    const cube = createCube();
+    scene.add(cube);
+    toAnimate.push(cube);
+    const cubeWP = new Vector3(1, groundPosition + 0.5, 1);
+    setWorldPosition(cube, cubeWP);
+    console.log("cube movable:", cube.userData.movable);
+    cube.addEventListener("click", () => {
+      alert("Cube clicked");
+    });
 
     // Helpers
 
@@ -72,7 +75,7 @@ class Score {
     // gridHelper.position.y = groundPosition;
     // scene.add(gridHelper);
 
-    const resizer = new Resizer(container, camera, renderer);
+    //const resizer = new Resizer(container, camera, renderer);
 
     //AR controller
     // controller = createController(renderer, particles);
@@ -83,18 +86,24 @@ class Score {
     //console.log("scene:", scene);
     //console.log("ground:", ground);
 
-    function animate() {
-      //put all logic for animation here
-
-      //   const referenceSpace = renderer.xr.getReferenceSpace(); // TODO: use this for AR
-      //   const session = renderer.xr.getSession(); //TODO: use this for AR
-      for (const object of toAnimate) {
-        object.animate();
-      }
-
-      renderer.render(scene, camera);
+    window.addEventListener("resize", onWindowResize);
+  }
+}
+function animate() {
+  if (toAnimate.length > 0) {
+    for (let i = 0; i < toAnimate.length; i++) {
+      toAnimate[i].animate();
     }
   }
+
+  renderer.render(scene, camera);
+}
+
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 export { Score };
