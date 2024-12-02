@@ -21,7 +21,7 @@ let scene;
 let toAnimate = [];
 let controller;
 
-class Score2 {
+class Score3 {
   constructor(container) {
     let userHeight = 1.65;
     let groundPosition = 0 - userHeight + 0.2;
@@ -112,4 +112,4 @@ function animate(time) {
 
   renderer.render(scene, camera);
 }
-export { Score2 };
+export { Score3 };
