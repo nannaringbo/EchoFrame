@@ -4,7 +4,7 @@ import { Resizer } from "./systems/resizer(NOTINUSE).js";
 import { createControls } from "./systems/controls.js";
 import { createText } from "./components/text.js";
 import { createXRRenderer } from "./systems/xrRenderer.js";
-import { createController } from "./systems/controller.js";
+import { createController } from "./components/controller.js";
 import { createFloor } from "./components/floor.js";
 import { createARLights } from "./components/arLights.js";
 import { setWorldPosition } from "./components/worldPosition.js";

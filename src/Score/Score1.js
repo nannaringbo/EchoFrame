@@ -4,7 +4,7 @@ import { Resizer } from "./systems/resizer(NOTINUSE).js";
 import { createControls } from "./systems/controls.js";
 import { createText } from "./components/text.js";
 import { createXRRenderer } from "./systems/xrRenderer.js";
-import { createController } from "./systems/controller.js";
+import { createController } from "./components/controller.js";
 import { createFloor } from "./components/floor.js";
 import { createARLights } from "./components/arLights.js";
 import { setWorldPosition } from "./components/worldPosition.js";
@@ -12,6 +12,10 @@ import { createCube } from "./components/cube.js";
 import { createParticles } from "./components/particles.js";
 import { createLights } from "./components/light.js";
 import { createPicker } from "./components/picker.js";
+import { createBox } from "./components/box.js";
+import { createStick } from "./components/stick.js";
+import { createRing } from "./components/ring.js";
+import { createArc } from "./components/arc.js";
 
 import {
   Vector3,
@@ -26,6 +30,7 @@ import {
   CylinderGeometry,
   BoxGeometry,
 } from "three";
+import { createTube } from "./components/tube.js";
 
 let camera;
 let renderer;
@@ -37,8 +42,8 @@ class Score1 {
   constructor(container) {
     let userHeight = 1.65;
     let groundPosition = 0 - userHeight + 0.2;
-    let roomWidth = 10;
-    let roomDepth = 10;
+    let roomWidth = 20;
+    let roomDepth = 20;
 
     console.log("roomDepth:", roomDepth);
     camera = createCamera();
@@ -52,9 +57,9 @@ class Score1 {
     const controls = createControls(camera, renderer.domElement);
     toAnimate.push(controls);
 
-    renderer.setAnimationLoop(animate);
+    renderer.setAnimationLoop(render);
 
-    const startingPoint = new Vector3(0, 0, userHeight - 0.2);
+    const startingPoint = new Vector3(0, userHeight - 0.2, 0);
 
     console.log("roomWidth:", roomWidth);
     console.log("roomDepth:", roomDepth);
@@ -82,123 +87,95 @@ class Score1 {
     // const cubeWP = new Vector3(0, groundPosition + userHeight - 0.2, -2);
     // setWorldPosition(cube, cubeWP);
     // console.log("cube movable:", cube.userData.movable);
-    // cube.addEventListener("click", () => {
-    //   alert("Cube clicked");
-    // });
 
     //Picker
-    const picker = createPicker(scene, camera, renderer);
+    const picker = createPicker(scene, camera, renderer, toAnimate);
     toAnimate.push(picker);
 
     //Boxes
 
-    for (let i = 0; i < 3; i++) {
-      const boxGeometry = new BoxGeometry(
-        Math.random(1),
-        0.5,
+    //Box1
+    const box1 = createBox(0.3, 0.7);
+    const box1WP = new Vector3(
+      6.5,
+      groundPosition + box1.geometry.parameters.height / 2,
+      1
+    );
+    setWorldPosition(box1, box1WP);
+    scene.add(box1);
 
-        Math.random(),
+    //Box2
+    const box2 = createBox(0.4, 0.2);
+    const box2WP = new Vector3(
+      7,
+      groundPosition + box2.geometry.parameters.height / 2,
+      -1
+    );
+    setWorldPosition(box2, box2WP);
+    scene.add(box2);
 
-        32
-      );
-      const boxMaterial = new MeshStandardMaterial({ color: 0xfabe64 });
-      const box = new Mesh(boxGeometry, boxMaterial);
-      box.rotateX(Math.PI / 2);
+    //Box3
+    const box3 = createBox(0.7, 0.5);
+    const box3WP = new Vector3(
+      7.2,
+      groundPosition + box3.geometry.parameters.height / 2,
+      0
+    );
+    setWorldPosition(box3, box3WP);
+    scene.add(box3);
 
-      const boxWP = new Vector3(
-        Math.floor(Math.random() * -5 + i / 0.7),
-        groundPosition + box.geometry.parameters.depth / 2 + i,
-        Math.floor(Math.random() * -3 + i / 0.7)
-      );
-
-      setWorldPosition(box, boxWP);
-      scene.add(box);
-    }
+    //Box4
+    const box4 = createBox(0.7, 0.4);
+    const box4WP = new Vector3(
+      6,
+      groundPosition + box4.geometry.parameters.height / 2,
+      0.1
+    );
+    setWorldPosition(box4, box4WP);
+    scene.add(box4);
 
     //Stick
-    const stickGeometry = new CylinderGeometry(0.01, 0.01, 1, 32);
-    const stickMaterial = new MeshStandardMaterial({ color: 0x4bc92e });
 
-    for (let i = 0; i < 15; i++) {
-      const stick = new Mesh(stickGeometry, stickMaterial);
-      stick.rotateX(Math.PI / 2);
-      stick.rotateZ(Math.PI / 1.5 + i * -1.9);
+    for (let i = 0; i < 7; i++) {
+      const stick = createStick(0.02, 1.2);
 
       const stickWP = new Vector3(
-        2 + i / 7.3,
+        1 + i / 7.3,
         groundPosition + 0.01,
-        2 + i / 11.3
+        3 + i / 11.3
       );
       setWorldPosition(stick, stickWP);
       scene.add(stick);
     }
 
-    //Stick2
-    // const stick2 = new Mesh(stickGeometry, stickMaterial);
-    // stick2.rotateX(Math.PI / 2);
-    // stick2.rotateY(Math.PI / 2);
-
-    // const stick2WP = new Vector3(2.5, groundPosition, 3);
-    // setWorldPosition(stick2, stick2WP);
-    // scene.add(stick2);
     //Sphere
     const sphereGeometry = new SphereGeometry(1, 32, 16);
     const sphereMaterial = new MeshStandardMaterial({ color: 0xb30952 });
     const sphere = new Mesh(sphereGeometry, sphereMaterial);
-
     const sphereWP = new Vector3(-3, groundPosition + 1, -2);
     setWorldPosition(sphere, sphereWP);
     scene.add(sphere);
-    //Torus Geometry
-    const torusGeometry = new TorusGeometry(0.5, 0.1, 16, 100);
-    const torusMaterial = new MeshStandardMaterial({ color: 0x91e6c9 });
-    const torus = new Mesh(torusGeometry, torusMaterial);
-    torus.rotateX(Math.PI / 2);
 
-    const torusWP = new Vector3(-2, groundPosition, 1);
-    setWorldPosition(torus, torusWP);
-    scene.add(torus);
+    //Torus Geometry
+    const ring = createRing(0.5, 0.1);
+    const ringWP = new Vector3(-2, groundPosition, 1);
+    setWorldPosition(ring, ringWP);
+    scene.add(ring);
 
     //Arc
-    const arcGeometry = new TorusGeometry(
-      0.5,
-      0.2,
-      16,
-      100,
-      6.283185307179586 / 2
-    );
-    const arcMaterial = new MeshStandardMaterial({ color: 0xf2e38d });
-    const arc = new Mesh(arcGeometry, arcMaterial);
-
-    const arcWP = new Vector3(3, groundPosition, -2);
+    const arc = createArc(1.7, 0.6);
+    const arcWP = new Vector3(3, groundPosition, -5);
     setWorldPosition(arc, arcWP);
+    arc.rotateY(Math.PI / 1.2);
     scene.add(arc);
 
     //Tube
-    class CustomSinCurve extends Curve {
-      constructor(scale = 1) {
-        super();
-        this.scale = scale;
-      }
-
-      getPoint(t, optionalTarget = new Vector3()) {
-        const tx = t * 3 - 1.5;
-        const ty = Math.sin(2 * Math.PI * t);
-        const tz = 0;
-
-        return optionalTarget.set(tx, ty, tz).multiplyScalar(this.scale);
-      }
-    }
-
-    const path = new CustomSinCurve(10);
-    const geometry = new TubeGeometry(path, 100, 2, 20, false);
-    const material = new MeshStandardMaterial({ color: 0x4287f5 });
-    const tube = new Mesh(geometry, material);
-    tube.rotateX(Math.PI / 2);
-    tube.rotateZ(Math.PI / 3);
-    tube.scale.set(0.1, 0.1, 0.1);
-
-    const tubeWP = new Vector3(2, groundPosition + 0.2, 0);
+    const tube = createTube(0.5, 2, true);
+    const tubeWP = new Vector3(
+      2,
+      groundPosition + tube.geometry.parameters.height,
+      0
+    );
     setWorldPosition(tube, tubeWP);
     scene.add(tube);
 
@@ -207,14 +184,9 @@ class Score1 {
     gridHelper.position.y = groundPosition;
     scene.add(gridHelper);
 
-    //AR controller
-    controller = createController(renderer, scene);
-    scene.add(controller);
-    toAnimate.push(controller);
-
     //scene.scale.set(0.5, 0.5, 0.5);
-    //console.log("scene:", scene);
-    //console.log("ground:", ground);
+    // console.log("scene:", scene);
+    // console.log("ground:", ground);
 
     window.addEventListener("resize", onWindowResize);
   }
@@ -225,13 +197,11 @@ function onWindowResize() {
 
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
-function animate(time) {
+function render(time) {
   time *= 0.001;
 
-  if (toAnimate.length > 0) {
-    for (let i = 0; i < toAnimate.length; i++) {
-      toAnimate[i].animate();
-    }
+  for (const object of toAnimate) {
+    object.animate();
   }
 
   renderer.render(scene, camera);

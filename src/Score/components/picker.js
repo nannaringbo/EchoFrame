@@ -1,50 +1,64 @@
 //Component created based on the example from https://threejs.org/manual/#en/webxr-look-to-select
 import { Raycaster } from "three";
+import { createController } from "./controller";
 
-function createPicker(scene, camera, renderer) {
+function createPicker(scene, camera, renderer, toAnimate) {
+  //let controller;
   const raycaster = new Raycaster();
   let pickedObject = null;
   let pickedObjectSavedColor;
+  let intersectedObjects = [];
   const pickPosition = { x: 0, y: 0 };
 
-  renderer.domElement.addEventListener("touchstart", onTouchStart);
-  renderer.domElement.addEventListener("touchend", onTouchEnd);
-  renderer.domElement.addEventListener("touchmove", onTouchMove);
+  const controller = createController(renderer);
+  scene.add(controller);
+  controller.addEventListener("selectstart", onSelectStart);
+  controller.addEventListener("selectend", onSelectEnd);
 
   function pick(scene, camera) {
     restoreColor(pickedObject, pickedObjectSavedColor);
     // cast a ray through the frustum
     raycaster.setFromCamera(pickPosition, camera);
     // get the list of objects the ray intersected
-    const intersectedObjects = raycaster.intersectObjects(scene.children, true);
+    intersectedObjects = raycaster.intersectObjects(scene.children, true);
     if (intersectedObjects.length > 0) {
       // pick the first object. It's the closest one
       pickedObject = intersectedObjects[0].object;
 
       highlightObject(pickedObject, pickedObjectSavedColor);
     }
+    return pickedObject;
   }
-
-  function onTouchStart(pickedObject, event) {
-    if (event.touches.length === 1) {
-      pickUpObject(pickedObject);
+  function onSelectStart(event) {
+    console.log("onSelectStart");
+    const controller = event.target;
+    pick(scene, camera);
+    if (pickedObject) {
+      controller.attach(pickedObject);
+      controller.userData.selected = pickedObject;
+      //Stop the animation loop of the object, while it is selected
+      const index = toAnimate.indexOf(pickedObject);
+      if (index !== -1) toAnimate.splice(index, 1);
     }
   }
 
-  function onTouchEnd(pickedObject, event) {
-    if (event.touches.length === 1) {
-      putDownObject(pickedObject);
+  function onSelectEnd(event) {
+    console.log("onSelectEnd");
+    const controller = event.target;
+    //Place the object inside the scene again, at the position where SelectEnd is called. Object is automatically detached form controller.
+    scene.attach(pickedObject);
+
+    controller.userData.selected = undefined;
+    //continues the animation loop of the object, after it has been placed back into the scene
+    if (!toAnimate.includes(pickedObject)) {
+      toAnimate.push(pickedObject); //pushes the object into the animation loop
+      console.log("toAnimate in onSelectEnd", toAnimate);
     }
   }
 
-  function onTouchMove(pickedObject, event) {
-    if (event.touches.length === 1) {
-      highlightObject(pickedObject);
-    }
-  }
-
-  raycaster.animate = (time) => {
-    pick(scene, camera, time);
+  raycaster.animate = () => {
+    pick(scene, camera);
+    controller.animate();
   };
 
   return raycaster;
@@ -80,16 +94,32 @@ function highlightObject(pickedObject, pickedObjectSavedColor) {
   }
 }
 
-function pickUpObject(pickedObject) {
+function pickUpObject(pickedObject, controller) {
   if (pickedObject) {
+    controller.attach(pickedObject);
+    controller.userData.selected = pickedObject;
     console.log("Object picked up:", pickedObject.name || pickedObject);
+
+    //Stop the animation loop of the object, while it is selected
+    // const index = toAnimate.indexOf(object);
+    // if (index !== -1) toAnimate.splice(index, 1);
   }
 }
 
-function putDownObject(pickedObject) {
-  if (pickedObject) {
+function putDownObject(pickedObject, controller, scene) {
+  if (controller.userData.selected !== undefined) {
+    const object = controller.userData.selected;
+
+    //Place the object inside the scene again, at the position where SelectEnd is called. Object is automatically detached form controller.
+    scene.attach(pickedObject);
+    controller.userData.selected = undefined;
+
     console.log("Object put down:", pickedObject.name || pickedObject);
 
-    restoreColor(pickedObject);
+    //continues the animation loop of the object, after it has been placed back into the scene
+    // if (!toAnimate.includes(object)) {
+    //   toAnimate.push(object); //pushes the object into the animation loop
+    //   console.log("toAnimate in onSelectEnd", toAnimate);
+    // }
   }
 }
