@@ -12,8 +12,25 @@ import { createCube } from "./components/cube.js";
 import { createParticles } from "./components/particles.js";
 import { createLights } from "./components/light.js";
 import { createPicker } from "./components/picker.js";
+import { createBox } from "./components/box.js";
+import { createStick } from "./components/stick.js";
+import { createRing } from "./components/ring.js";
+import { createArc } from "./components/arc.js";
 
-import { Vector3, GridHelper } from "three";
+import {
+  Vector3,
+  GridHelper,
+  TubeGeometry,
+  MeshBasicMaterial,
+  Mesh,
+  MeshStandardMaterial,
+  Curve,
+  TorusGeometry,
+  SphereGeometry,
+  CylinderGeometry,
+  BoxGeometry,
+} from "three";
+import { createTube } from "./components/tube.js";
 
 let camera;
 let renderer;
@@ -25,8 +42,8 @@ class Score2 {
   constructor(container) {
     let userHeight = 1.65;
     let groundPosition = 0 - userHeight + 0.2;
-    let roomWidth = 5;
-    let roomDepth = 5;
+    let roomWidth = 20;
+    let roomDepth = 20;
 
     console.log("roomDepth:", roomDepth);
     camera = createCamera();
@@ -40,9 +57,9 @@ class Score2 {
     const controls = createControls(camera, renderer.domElement);
     toAnimate.push(controls);
 
-    renderer.setAnimationLoop(animate);
+    renderer.setAnimationLoop(render);
 
-    const startingPoint = new Vector3(0, 0, userHeight - 0.2);
+    const startingPoint = new Vector3(0, userHeight - 0.2, 0);
 
     console.log("roomWidth:", roomWidth);
     console.log("roomDepth:", roomDepth);
@@ -62,6 +79,10 @@ class Score2 {
     const lights = createLights();
     scene.add(lights);
 
+    //Picker
+    const picker = createPicker(scene, camera, renderer, toAnimate);
+    toAnimate.push(picker);
+
     //Define objects
 
     const cube = createCube();
@@ -70,23 +91,15 @@ class Score2 {
     const cubeWP = new Vector3(0, groundPosition + userHeight - 0.2, -2);
     setWorldPosition(cube, cubeWP);
     console.log("cube movable:", cube.userData.movable);
-    cube.addEventListener("click", () => {
-      alert("Cube clicked");
-    });
 
-    // Helpers
-    // const gridHelper = new GridHelper(roomDepth, roomDepth);
-    // gridHelper.position.y = groundPosition;
-    // scene.add(gridHelper);
-
-    //AR controller
-    // controller = createController(renderer, scene);
-    // scene.add(controller);
-    // toAnimate.push(controller);
+    //Helpers
+    const gridHelper = new GridHelper(roomDepth, roomDepth);
+    gridHelper.position.y = groundPosition;
+    scene.add(gridHelper);
 
     //scene.scale.set(0.5, 0.5, 0.5);
-    //console.log("scene:", scene);
-    //console.log("ground:", ground);
+    // console.log("scene:", scene);
+    // console.log("ground:", ground);
 
     window.addEventListener("resize", onWindowResize);
   }
@@ -97,13 +110,11 @@ function onWindowResize() {
 
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
-function animate(time) {
+function render(time) {
   time *= 0.001;
 
-  if (toAnimate.length > 0) {
-    for (let i = 0; i < toAnimate.length; i++) {
-      toAnimate[i].animate();
-    }
+  for (const object of toAnimate) {
+    object.animate();
   }
 
   renderer.render(scene, camera);

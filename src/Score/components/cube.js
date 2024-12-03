@@ -13,10 +13,10 @@ function createCube() {
   const geometry = new BoxGeometry(0.5, 0.5, 0.5);
 
   //create a default (white) Basic material
-  const material = new MeshStandardMaterial(); //For no texture
+  //const material = new MeshStandardMaterial(); //For no texture
 
-  // const texture = createTexture("./assets/textures/CrumbledPlastic.png");
-  // const material = new MeshStandardMaterial({ map: texture });
+  const texture = createTexture("./assets/textures/CrumbledPlastic.png");
+  const material = new MeshStandardMaterial({ map: texture });
 
   // create a Mesh containing the geometry and material
   const cube = new Mesh(geometry, material);

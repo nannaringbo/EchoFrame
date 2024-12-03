@@ -7,8 +7,6 @@ import {
 } from "three";
 
 function createMeshGroup() {
-  // a group holds other objects
-  // but cannot be seen itself
   const group = new Group();
 
   const geometry = new SphereGeometry(0.025, 16, 16);
