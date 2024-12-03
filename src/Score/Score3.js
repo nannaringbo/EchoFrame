@@ -11,7 +11,7 @@ import { setWorldPosition } from "./components/worldPosition.js";
 import { createCube } from "./components/cube.js";
 import { createParticles } from "./components/particles.js";
 import { createLights } from "./components/light.js";
-import { createPickHelper } from "./components/pickHelper.js";
+import { createPicker } from "./components/picker.js";
 
 import { Vector3, GridHelper } from "three";
 
@@ -74,10 +74,6 @@ class Score3 {
       alert("Cube clicked");
     });
 
-    //PickHelper
-
-    const pickHelper = createPickHelper(scene, camera);
-    toAnimate.push(pickHelper);
     // Helpers
     // const gridHelper = new GridHelper(roomDepth, roomDepth);
     // gridHelper.position.y = groundPosition;

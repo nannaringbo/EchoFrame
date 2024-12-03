@@ -11,7 +11,7 @@ import { setWorldPosition } from "./components/worldPosition.js";
 import { createCube } from "./components/cube.js";
 import { createParticles } from "./components/particles.js";
 import { createLights } from "./components/light.js";
-import { createPickHelper } from "./components/pickHelper.js";
+import { createPicker } from "./components/picker.js";
 
 import {
   Vector3,
@@ -86,25 +86,19 @@ class Score1 {
     //   alert("Cube clicked");
     // });
 
-    //PickHelper
-    // const pickHelper = createPickHelper(scene, camera);
-    // toAnimate.push(pickHelper);
+    //Picker
+    const picker = createPicker(scene, camera, renderer);
+    toAnimate.push(picker);
 
     //Boxes
 
-    const boxGeometry = new BoxGeometry(
-      Math.random(),
-      Math.random(),
-      Math.random(),
-      32
-    );
-    const boxMaterial = new MeshStandardMaterial({ color: 0x4bc92e });
-
     for (let i = 0; i < 3; i++) {
       const boxGeometry = new BoxGeometry(
-        Math.random(),
+        Math.random(1),
         0.5,
+
         Math.random(),
+
         32
       );
       const boxMaterial = new MeshStandardMaterial({ color: 0xfabe64 });
@@ -113,7 +107,7 @@ class Score1 {
 
       const boxWP = new Vector3(
         Math.floor(Math.random() * -5 + i / 0.7),
-        groundPosition + box.geometry.parameters.depth / 2,
+        groundPosition + box.geometry.parameters.depth / 2 + i,
         Math.floor(Math.random() * -3 + i / 0.7)
       );
 
