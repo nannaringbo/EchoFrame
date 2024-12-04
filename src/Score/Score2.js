@@ -16,6 +16,7 @@ import { createBox } from "./components/box.js";
 import { createStick } from "./components/stick.js";
 import { createRing } from "./components/ring.js";
 import { createArc } from "./components/arc.js";
+import { createAbsorbParticles } from "./components/absorbParticles.js";
 
 import {
   Vector3,
@@ -80,17 +81,24 @@ class Score2 {
     scene.add(lights);
 
     //Picker
-    const picker = createPicker(scene, camera, renderer, toAnimate);
-    toAnimate.push(picker);
+    // const picker = createPicker(scene, camera, renderer, toAnimate);
+    // toAnimate.push(picker);
 
     //Define objects
-
     const cube = createCube();
     scene.add(cube);
     toAnimate.push(cube);
-    const cubeWP = new Vector3(0, groundPosition + userHeight - 0.2, -2);
+    const cubeWP = new Vector3(3, groundPosition + userHeight - 0.2, -2);
     setWorldPosition(cube, cubeWP);
     console.log("cube movable:", cube.userData.movable);
+
+    //AbsorbParticles
+    const absorbParticles = createAbsorbParticles(1000, 0.01);
+    scene.add(absorbParticles);
+    toAnimate.push(absorbParticles);
+
+    const absorbParticlesWP = new Vector3(0, groundPosition + 0.0001, 0);
+    setWorldPosition(absorbParticles, absorbParticlesWP);
 
     //Helpers
     const gridHelper = new GridHelper(roomDepth, roomDepth);
