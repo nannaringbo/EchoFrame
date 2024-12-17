@@ -140,13 +140,13 @@ class Score1 {
     // console.log("cube position:", cube.position);
 
     //Helpers that can be used for testing
-    const gridHelper = new GridHelper(roomDepth, roomDepth);
-    gridHelper.position.y = groundPosition;
-    scene.add(gridHelper);
+    // const gridHelper = new GridHelper(roomDepth, roomDepth);
+    // gridHelper.position.y = groundPosition;
+    // scene.add(gridHelper);
 
     //Set scale of the scene, to match measurements of physical environment
 
-    //scene.scale.set(0.5, 0.5, 0.5);
+    scene.scale.set(0.25, 0.25, 0.25);
     // console.log("scene:", scene);
     // console.log("ground:", ground);
 

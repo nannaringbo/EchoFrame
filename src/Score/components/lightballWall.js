@@ -3,7 +3,7 @@ import { createLightBall } from "./lightBall";
 import { createWall } from "./wall";
 
 function createLightballWall() {
-  const lightBall = createLightBall(0.1, "#f0e785", 20);
+  const lightBall = createLightBall(0.1, "#f0e785", 2);
   const wall = createWall();
   const group = new Group();
 
