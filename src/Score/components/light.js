@@ -1,7 +1,7 @@
 import { AmbientLight, DirectionalLight, HemisphereLight } from "three";
 
 function createLights() {
-  //const ambientLight = new Ambient(0xffffbb, 0x080820, 0.4);
+  //const ambientLight = new HemisphereLight(0xffffbb, 0x080820, 0.4);
   const ambientLight = new AmbientLight(0xffffbb, 20);
   const mainLight = new DirectionalLight(0xfffceb, 4);
 

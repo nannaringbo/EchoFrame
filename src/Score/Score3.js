@@ -7,6 +7,8 @@ import { setWorldPosition } from "./components/worldPosition.js";
 import { createCube } from "./components/cube.js";
 import { createLights } from "./components/light.js";
 import { createPicker } from "./components/picker.js";
+import { createSkyBox } from "./components/skyBox.js";
+import { createWater } from "./components/water.js";
 
 import { Vector3, GridHelper } from "three";
 
@@ -55,30 +57,31 @@ class Score3 {
     //Add functionality for user interactions below:
 
     //Picker
-    const picker = createPicker(scene, camera, renderer, toAnimate);
-    toAnimate.push(picker);
+    // const picker = createPicker(scene, camera, renderer, toAnimate);
+    // toAnimate.push(picker);
 
     //Add 3D objects and the different score elements below:
 
-    //Example of defining and initializing a cube:
+    //skyBox
+    const skybox = createSkyBox();
+    toAnimate.push(skybox);
+    scene.add(skybox);
+    //World position
+    const skyboxWP = new Vector3(0, groundPosition, 0);
+    setWorldPosition(skybox, skyboxWP);
 
-    const cube = createCube(0.5, 0.5, 0.5); //Call the createCube function to create a cube
-
-    scene.add(cube); //Add the cube to the Three.js scene
-
-    toAnimate.push(cube); //Add the cube to the list of objects to animate, to enable continuous rendering
-
-    const cubeWP = new Vector3(-1, 0, -1); //Define the position of the cube in the room, using the Vector3 class from Three.js. The center of the cube, will then be positioned on this vector. For the y-axis: Use groundposition to place on the ground and 0 to place at the height of the users eyes. On the x axis: use -1 to place right in front of the user, numbers below -1 moves it away from the user along the x-axis. On the z-axis: use -1 to place the cube in front of the user, and numbers below -1 moves it further away from the user on teh y-axis. Using the same numbers on the x and z axis, will place the cube along the centerline of the user.
-
-    setWorldPosition(cube, cubeWP); //Set the world position of the cube, to define its position inside the Three.js scene. The world position makes sure that it is placed according to the room dimensions, and should be defined for each object that is added to the scene.
-
-    console.log("cubeWP:", cubeWP);
-    console.log("cube position:", cube.position);
+    //Water
+    const water = createWater(scene);
+    toAnimate.push(water);
+    scene.add(water);
+    //World position
+    const waterWP = new Vector3(0, groundPosition + 2, 0);
+    setWorldPosition(water, waterWP);
 
     //Helpers that can be used for testing
-    const gridHelper = new GridHelper(roomDepth, roomDepth);
-    gridHelper.position.y = groundPosition;
-    scene.add(gridHelper);
+    // const gridHelper = new GridHelper(roomDepth, roomDepth);
+    // gridHelper.position.y = groundPosition;
+    // scene.add(gridHelper);
 
     //Set scale of the scene, to match measurements of physical environment
 

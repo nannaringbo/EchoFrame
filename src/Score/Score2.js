@@ -57,8 +57,8 @@ class Score2 {
     //Add functionality for user interactions below:
 
     //Picker
-    const picker = createPicker(scene, camera, renderer, toAnimate);
-    toAnimate.push(picker);
+    // const picker = createPicker(scene, camera, renderer, toAnimate);
+    // toAnimate.push(picker);
 
     //Add 3D objects and the different score elements below:
 
