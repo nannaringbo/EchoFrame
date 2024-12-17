@@ -5,7 +5,7 @@ import basicSsl from "@vitejs/plugin-basic-ssl";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), basicSsl()],
-  base: "/proto-final/",
+  base: "/EchoFrame/",
   build: { chunkSizeWarningLimit: 3000, outDir: "dist" },
   assetsInclude: "**/*.task",
 });
