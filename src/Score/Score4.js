@@ -63,7 +63,7 @@ class Score4 {
     //Ground
     const ground = createFloor(
       roomWidth,
-      roomDepth - roomDepth / 2.5,
+      roomDepth / 1.5,
       "./assets/textures/FloorMap_v2.tiff"
     );
     toAnimate.push(ground);
