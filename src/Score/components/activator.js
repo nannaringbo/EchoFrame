@@ -1,33 +1,46 @@
 import { Vector3, Raycaster, BufferGeometry, Line } from "three";
-import { XRControllerModelFactory } from "three/examples/jsm/webxr/XRControllerModelFactory.js";
+import { createController } from "./controller";
 
-function createActivator(renderer, particlesGroup) {
-  let controller;
+function createActivator(scene, camera, renderer, toAnimate, particlesGroup) {
   const raycaster = new Raycaster();
-  let intersected = [];
+  let pickedObject = null;
+  let pickedObjectSavedColor;
+  const pickPosition = { x: 0, y: 0 };
 
-  controller = renderer.xr.getController(0);
+  let intersectedObjects = [];
+
+  const controller = createController(renderer);
+  scene.add(controller);
   controller.addEventListener("selectstart", onSelectStart);
   controller.addEventListener("selectend", onSelectEnd);
+
+  function getIntersections(scene, camera) {
+    // controller.updateMatrixWorld();
+    raycaster.setFromCamera(pickPosition, camera);
+
+    // Perform raycasting with the particles group
+    intersectedObjects = raycaster.intersectObjects(scene.children, true);
+    if (intersectedObjects.length > 0) {
+      // pick the first object. It's the closest one
+      pickedObject = intersectedObjects[0].object;
+    }
+    return pickedObject;
+  }
 
   function onSelectStart(event) {
     const controller = event.target;
 
-    const intersections = getIntersections(controller);
-    if (intersections.length > 0) {
-      const intersection = intersections[0];
-      const object = intersection.object;
+    const object = getIntersections(scene, camera);
 
-      if (!object.userData.isOn) {
-        object.material.opacity = 0.2;
-        controller.userData.selected = object;
-        particle.userData.isOn = true;
-      }
-      if (object.userData.isOn) {
-        object.material.opacity = 0;
-        controller.userData.selected = object;
-        particle.userData.isOn = false;
-      }
+    if (!object.userData.isOn) {
+      object.material.opacity = 0.2;
+      controller.userData.selected = object;
+      particle.userData.isOn = true;
+    }
+    if (object.userData.isOn) {
+      object.material.opacity = 0;
+      controller.userData.selected = object;
+      particle.userData.isOn = false;
     }
   }
 
@@ -40,41 +53,31 @@ function createActivator(renderer, particlesGroup) {
     }
   }
 
-  function getIntersections(controller) {
-    controller.updateMatrixWorld();
-    raycaster.setFromCamera({ x: 0, y: 0 }, renderer.xr.getCamera());
+  // function intersectObjects() {
+  //   if (controller.userData.selected !== undefined) return;
+  //   const intersections = getIntersections(controller);
 
-    // Perform raycasting with the particles group
-    const movableObjects = raycaster
-      .intersectObjects(particlesGroup.children, true)
-      .filter((intersection) => intersection.object.userData.movable);
+  //   if (intersections.length > 0) {
+  //     const intersection = intersections[0];
+  //     const object = intersection.object;
+  //     intersectedObjects.push(object);
+  //   }
+  // }
 
-    return movableObjects;
-  }
+  // function resetIntersected() {
+  //   while (intersectedObjects.length) {
+  //     const object = intersectedObjects.pop();
+  //   }
+  // }
 
-  function intersectObjects() {
-    if (controller.userData.selected !== undefined) return;
-    const intersections = getIntersections(controller);
-
-    if (intersections.length > 0) {
-      const intersection = intersections[0];
-      const object = intersection.object;
-      intersected.push(object);
-    }
-  }
-
-  function resetIntersected() {
-    while (intersected.length) {
-      const object = intersected.pop();
-    }
-  }
-
-  controller.animate = () => {
-    resetIntersected();
-    intersectObjects(controller);
+  raycaster.animate = () => {
+    getIntersections(scene, camera);
+    controller.animate();
+    //resetIntersected();
+    //intersectObjects(controller);
   };
 
-  controller.userData.movable = false;
+  //controller.userData.movable = false;
   return controller;
 }
 export { createActivator };

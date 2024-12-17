@@ -66,9 +66,14 @@ class Score5 {
     // scene.add(gridHelper);
 
     //Add functionality for user interactions below:
-
-    //Activator
-    const activator = createActivator(renderer, particles);
+    //Picker
+    const activator = createActivator(
+      scene,
+      camera,
+      renderer,
+      toAnimate,
+      particles
+    );
     toAnimate.push(activator);
 
     //Event listener for resizing the window
