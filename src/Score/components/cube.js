@@ -8,9 +8,9 @@ import {
 } from "three";
 import { createTexture } from "./createTexture.js";
 
-function createCube() {
+function createCube(height, width, depth) {
   // create a geometry
-  const geometry = new BoxGeometry(0.5, 0.5, 0.5);
+  const geometry = new BoxGeometry(height, width, depth);
 
   //create a default (white) Basic material
   //const material = new MeshStandardMaterial(); //For no texture

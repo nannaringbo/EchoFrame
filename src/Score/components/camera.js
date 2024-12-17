@@ -8,7 +8,6 @@ function createCamera() {
 
   const camera = new PerspectiveCamera(fov, aspect, near, far);
 
-  camera.userData.movable = false;
   return camera;
 }
 

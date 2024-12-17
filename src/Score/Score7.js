@@ -16,6 +16,7 @@ import { createBox } from "./components/box.js";
 import { createStick } from "./components/stick.js";
 import { createRing } from "./components/ring.js";
 import { createArc } from "./components/arc.js";
+import { createAbsorbParticles } from "./components/absorbParticles.js";
 
 import {
   Vector3,
@@ -38,7 +39,7 @@ let scene;
 let toAnimate = [];
 let controller;
 
-class Score2 {
+class Score7 {
   constructor(container) {
     let userHeight = 1.65;
     let groundPosition = 0 - userHeight + 0.2;
@@ -79,105 +80,25 @@ class Score2 {
     const lights = createLights();
     scene.add(lights);
 
-    //Define objects
-
-    // const cube = createCube();
-    // scene.add(cube);
-    // toAnimate.push(cube);
-    // const cubeWP = new Vector3(0, groundPosition + userHeight - 0.2, -2);
-    // setWorldPosition(cube, cubeWP);
-    // console.log("cube movable:", cube.userData.movable);
-
     //Picker
-    const picker = createPicker(scene, camera, renderer, toAnimate);
-    toAnimate.push(picker);
+    // const picker = createPicker(scene, camera, renderer, toAnimate);
+    // toAnimate.push(picker);
 
-    //Boxes
+    //Define objects
+    const cube = createCube();
+    scene.add(cube);
+    toAnimate.push(cube);
+    const cubeWP = new Vector3(3, groundPosition + userHeight - 0.2, -2);
+    setWorldPosition(cube, cubeWP);
+    console.log("cube movable:", cube.userData.movable);
 
-    //Box1
-    const box1 = createBox(0.3, 0.7);
-    const box1WP = new Vector3(
-      6.5,
-      groundPosition + box1.geometry.parameters.height / 2,
-      1
-    );
-    setWorldPosition(box1, box1WP);
-    scene.add(box1);
+    //AbsorbParticles
+    const absorbParticles = createAbsorbParticles(1000, 0.01);
+    scene.add(absorbParticles);
+    toAnimate.push(absorbParticles);
 
-    //Box2
-    const box2 = createBox(0.4, 0.2);
-    const box2WP = new Vector3(
-      7,
-      groundPosition + box2.geometry.parameters.height / 2,
-      -1
-    );
-    setWorldPosition(box2, box2WP);
-    scene.add(box2);
-
-    //Box3
-    const box3 = createBox(0.7, 0.5);
-    const box3WP = new Vector3(
-      7.2,
-      groundPosition + box3.geometry.parameters.height / 2,
-      0
-    );
-    setWorldPosition(box3, box3WP);
-    scene.add(box3);
-
-    //Box4
-    const box4 = createBox(0.7, 0.4);
-    const box4WP = new Vector3(
-      6,
-      groundPosition + box4.geometry.parameters.height / 2,
-      0.1
-    );
-    setWorldPosition(box4, box4WP);
-    scene.add(box4);
-
-    //Stick
-
-    for (let i = 0; i < 7; i++) {
-      const stick = createStick(0.02, 1.2);
-
-      const stickWP = new Vector3(
-        1 + i / 7.3,
-        groundPosition + 0.01,
-        3 + i / 11.3
-      );
-      setWorldPosition(stick, stickWP);
-      scene.add(stick);
-    }
-
-    //Sphere
-    const sphereGeometry = new SphereGeometry(1, 32, 16);
-    const sphereMaterial = new MeshStandardMaterial({ color: 0xb30952 });
-    const sphere = new Mesh(sphereGeometry, sphereMaterial);
-    const sphereWP = new Vector3(-3, groundPosition + 1, -2);
-    setWorldPosition(sphere, sphereWP);
-    scene.add(sphere);
-
-    //Torus Geometry
-    const ring = createRing(0.5, 0.1);
-    const ringWP = new Vector3(-2, groundPosition, 1);
-    setWorldPosition(ring, ringWP);
-    scene.add(ring);
-
-    //Arc
-    const arc = createArc(1.7, 0.6);
-    const arcWP = new Vector3(3, groundPosition, -5);
-    setWorldPosition(arc, arcWP);
-    arc.rotateY(Math.PI / 1.2);
-    scene.add(arc);
-
-    //Tube
-    const tube = createTube(0.5, 2, true);
-    const tubeWP = new Vector3(
-      2,
-      groundPosition + tube.geometry.parameters.height,
-      0
-    );
-    setWorldPosition(tube, tubeWP);
-    scene.add(tube);
+    const absorbParticlesWP = new Vector3(0, groundPosition + 0.0001, 0);
+    setWorldPosition(absorbParticles, absorbParticlesWP);
 
     //Helpers
     const gridHelper = new GridHelper(roomDepth, roomDepth);
@@ -206,4 +127,4 @@ function render(time) {
 
   renderer.render(scene, camera);
 }
-export { Score2 };
+export { Score7 };
