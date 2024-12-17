@@ -6,7 +6,7 @@ import {
   Group,
   DoubleSide,
 } from "three";
-import { uploadTiff } from "../systems/tiffUpload.js";
+import { uploadTiff } from "./tiffUpload.js";
 
 function createFloor(roomWidth, roomDepth, filePath) {
   const floor = new Group();

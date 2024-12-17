@@ -1,14 +1,14 @@
-import { createCamera } from "./components/camera.js";
-import { createScene } from "./components/scene.js";
-import { createControls } from "./systems/controls.js";
-import { createXRRenderer } from "./systems/xrRenderer.js";
-import { createARLights } from "./components/arLights.js";
-import { setWorldPosition } from "./components/worldPosition.js";
-import { createCube } from "./components/cube.js";
-import { createLights } from "./components/light.js";
-import { createPicker } from "./components/picker.js";
-import { createSkyBox } from "./components/skyBox.js";
-import { createWater } from "./components/water.js";
+import { createCamera } from "./systemComponents/camera.js";
+import { createScene } from "./systemComponents/scene.js";
+import { createControls } from "./systemComponents/controls.js";
+import { createXRRenderer } from "./systemComponents/xrRenderer.js";
+import { createARLights } from "./scoreComponents/arLights.js";
+import { setWorldPosition } from "./scoreComponents/worldPosition.js";
+import { createCube } from "./scoreComponents/cube.js";
+import { createLights } from "./scoreComponents/light.js";
+import { createPicker } from "./scoreComponents/picker.js";
+import { createSkyBox } from "./scoreComponents/skyBox.js";
+import { createWater } from "./scoreComponents/water.js";
 
 import { Vector3, GridHelper } from "three";
 

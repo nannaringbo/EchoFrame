@@ -64,7 +64,7 @@ function createLandingPage() {
     text: "Score 3",
     onClick: () => {
       const score = new Score3(container);
-      buttonTemplate.hidden = true;
+
       button1.hidden = true;
       button2.hidden = true;
       button3.hidden = true;
