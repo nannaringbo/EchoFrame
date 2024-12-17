@@ -46,19 +46,13 @@ class Score3 {
     setWorldPosition(camera, startingPoint);
 
     //AR light - Adapts according to the light in the room (ONLY WORKS WHEN THE SCORE IS RUN IN AR - NOT IN THE BROWSER)
-    // const arLight = createARLights(scene, renderer);
-    // scene.add(arLight);
-    // console.log("arLight movable:", arLight.userData.movable);
+    const arLight = createARLights(scene, renderer);
+    scene.add(arLight);
+    console.log("arLight movable:", arLight.userData.movable);
 
     //Use notmal light, if not interested in using AR Lights
-    const lights = createLights();
-    scene.add(lights);
-
-    //Add functionality for user interactions below:
-
-    //Picker
-    // const picker = createPicker(scene, camera, renderer, toAnimate);
-    // toAnimate.push(picker);
+    // const lights = createLights();
+    // scene.add(lights);
 
     //Add 3D objects and the different score elements below:
 
@@ -88,6 +82,8 @@ class Score3 {
     //scene.scale.set(0.5, 0.5, 0.5);
     // console.log("scene:", scene);
     // console.log("ground:", ground);
+
+    //Add functionality for user interactions below:
 
     //Event listener for resizing the window
     window.addEventListener("resize", onWindowResize);

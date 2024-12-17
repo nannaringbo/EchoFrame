@@ -46,15 +46,13 @@ class Score4 {
     setWorldPosition(camera, startingPoint);
 
     //AR light - Adapts according to the light in the room (ONLY WORKS WHEN THE SCORE IS RUN IN AR - NOT IN THE BROWSER)
-    // const arLight = createARLights(scene, renderer);
-    // scene.add(arLight);
-    // console.log("arLight movable:", arLight.userData.movable);
+    const arLight = createARLights(scene, renderer);
+    scene.add(arLight);
+    console.log("arLight movable:", arLight.userData.movable);
 
     //Use notmal light, if not interested in using AR Lights
-    const lights = createLights();
-    scene.add(lights);
-
-    //Add functionality for user interactions below:
+    // const lights = createLights();
+    // scene.add(lights);
 
     //Add 3D objects and the different score elements below:
 
@@ -131,18 +129,20 @@ class Score4 {
     // gridHelper.position.y = groundPosition;
     // scene.add(gridHelper);
 
+    //Add functionality for user interactions below:
+
     //Set scale of the scene, to match measurements of physical environment
 
     scene.scale.set(0.25, 0.25, 0.25);
     // console.log("scene:", scene);
     // console.log("ground:", ground);
 
-    //Event listener for resizing the window
-    window.addEventListener("resize", onWindowResize);
-
     //Picker
     const picker = createPicker(scene, camera, renderer, toAnimate);
     toAnimate.push(picker);
+
+    //Event listener for resizing the window
+    window.addEventListener("resize", onWindowResize);
   }
 }
 //Function to enable resize of the window

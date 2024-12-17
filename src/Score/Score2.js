@@ -54,12 +54,6 @@ class Score2 {
     const lights = createLights();
     scene.add(lights);
 
-    //Add functionality for user interactions below:
-
-    //Picker
-    // const picker = createPicker(scene, camera, renderer, toAnimate);
-    // toAnimate.push(picker);
-
     //Add 3D objects and the different score elements below:
 
     //Ground
@@ -125,7 +119,7 @@ class Score2 {
 
     scene.add(fittingIn, walking, tracing, fixedPoint, frogLeap, weaving);
 
-    //Helpers that can be used for testing
+    //Helpers used for testing
     // const gridHelper = new GridHelper(roomDepth, roomDepth);
     // gridHelper.position.y = groundPosition;
     // scene.add(gridHelper);
@@ -135,6 +129,8 @@ class Score2 {
     scene.scale.set(0.25, 0.25, 0.25);
     // console.log("scene:", scene);
     // console.log("ground:", ground);
+
+    //Add functionality for user interactions below:
 
     //Event listener for resizing the window
     window.addEventListener("resize", onWindowResize);

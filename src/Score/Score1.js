@@ -50,19 +50,13 @@ class Score1 {
     setWorldPosition(camera, startingPoint);
 
     //AR light - Adapts according to the light in the room (ONLY WORKS WHEN THE SCORE IS RUN IN AR - NOT IN THE BROWSER)
-    // const arLight = createARLights(scene, renderer);
-    // scene.add(arLight);
+    const arLight = createARLights(scene, renderer);
+    scene.add(arLight);
     // console.log("arLight movable:", arLight.userData.movable);
 
     //Use notmal light, if not interested in using AR Lights
-    const lights = createLights();
-    scene.add(lights);
-
-    //Add functionality for user interactions below:
-
-    //Picker
-    // const picker = createPicker(scene, camera, renderer, toAnimate);
-    // toAnimate.push(picker);
+    // const lights = createLights();
+    // scene.add(lights);
 
     //Add 3D objects and the different score elements below:
 
@@ -124,31 +118,11 @@ class Score1 {
     const absorbingParticlesWP = new Vector3(6, groundPosition, -1.3);
     setWorldPosition(absorbingParticles, absorbingParticlesWP);
 
-    //Example of defining and initializing a cube:
-
-    // const cube = createCube(0.5, 0.5, 0.5); //Call the createCube function to create a cube
-
-    // scene.add(cube); //Add the cube to the Three.js scene
-
-    // toAnimate.push(cube); //Add the cube to the list of objects to animate, to enable continuous rendering
-
-    // const cubeWP = new Vector3(-5, 0, -5); //Define the position of the cube in the room, using the Vector3 class from Three.js. The center of the cube, will then be positioned on this vector. For the y-axis: Use groundposition to place on the ground and 0 to place at the height of the users eyes. On the x axis: use -1 to place right in front of the user, numbers below -1 moves it away from the user along the x-axis. On the z-axis: use -1 to place the cube in front of the user, and numbers below -1 moves it further away from the user on teh y-axis. Using the same numbers on the x and z axis, will place the cube along the centerline of the user.
-
-    // setWorldPosition(cube, cubeWP); //Set the world position of the cube, to define its position inside the Three.js scene. The world position makes sure that it is placed according to the room dimensions, and should be defined for each object that is added to the scene.
-
-    // console.log("cubeWP:", cubeWP);
-    // console.log("cube position:", cube.position);
-
-    //Helpers that can be used for testing
-    // const gridHelper = new GridHelper(roomDepth, roomDepth);
-    // gridHelper.position.y = groundPosition;
-    // scene.add(gridHelper);
-
-    //Set scale of the scene, to match measurements of physical environment
-
     scene.scale.set(0.25, 0.25, 0.25);
     // console.log("scene:", scene);
     // console.log("ground:", ground);
+
+    //Add functionality for user interactions below:
 
     //Event listener for resizing the window
     window.addEventListener("resize", onWindowResize);
