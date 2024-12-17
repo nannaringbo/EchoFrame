@@ -18,16 +18,9 @@ import {
 } from "three";
 
 function createParticles(numberOfParticles, particleSize) {
-  // const numberOfParticles = 2000;
-  // const particleSize = 0.08;
   const particles = new Group();
 
   const geometry = new SphereGeometry(particleSize, 32, 32);
-
-  //   const texture = new TextureLoader().load(
-  //     "src/World/assets/CrumbledPlastic.png"
-  //   );
-  //   texture.colorSpace = SRGBColorSpace;
 
   for (let i = 0; i < numberOfParticles; i++) {
     const material = new MeshStandardMaterial({

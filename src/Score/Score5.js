@@ -7,6 +7,8 @@ import { setWorldPosition } from "./components/worldPosition.js";
 import { createCube } from "./components/cube.js";
 import { createLights } from "./components/light.js";
 import { createPicker } from "./components/picker.js";
+import { createParticles } from "./components/particles.js";
+import { createActivator } from "./components/activator.js";
 
 import { Vector3, GridHelper } from "three";
 
@@ -55,10 +57,15 @@ class Score5 {
     //Add functionality for user interactions below:
 
     //Picker
-    const picker = createPicker(scene, camera, renderer, toAnimate);
-    toAnimate.push(picker);
+    const activator = createActivator(scene, camera, renderer, toAnimate);
+    toAnimate.push(activator);
 
     //Add 3D objects and the different score elements below:
+    const particles = createParticles(100, 0.2);
+    scene.add(particles);
+    toAnimate.push(particles);
+    const particlesWP = new Vector3(0, userHeight, 0);
+    setWorldPosition(particles, particlesWP);
 
     //Example of defining and initializing a cube:
 
@@ -76,9 +83,9 @@ class Score5 {
     console.log("cube position:", cube.position);
 
     //Helpers that can be used for testing
-    const gridHelper = new GridHelper(roomDepth, roomDepth);
-    gridHelper.position.y = groundPosition;
-    scene.add(gridHelper);
+    // const gridHelper = new GridHelper(roomDepth, roomDepth);
+    // gridHelper.position.y = groundPosition;
+    // scene.add(gridHelper);
 
     //Set scale of the scene, to match measurements of physical environment
 
