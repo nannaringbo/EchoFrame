@@ -18,7 +18,7 @@ function createTextBox(message, fontSize, textcolor) {
   const material = new MeshBasicMaterial({
     color: 0xdaf5ef,
     transparent: true,
-    opacity: 0.1,
+    opacity: 0.4,
     side: DoubleSide,
   });
   const textBox = new Mesh(geometry, material);
@@ -32,7 +32,7 @@ function createTextBox(message, fontSize, textcolor) {
       const matLite = new MeshBasicMaterial({
         color: color,
         transparent: true,
-        opacity: 0.5,
+        opacity: 1,
         side: DoubleSide,
       });
 
@@ -58,27 +58,7 @@ function createTextBox(message, fontSize, textcolor) {
 
   textBox.userData.movable = true;
 
-  textBox.animate = () => {
-    // // Update the position incrementally
-    // textObject.position.y += 0.02 * directionY;
-    // textObject.position.x += 0.03 * directionX;
-    // // Check for boundaries and reverse direction if needed
-    // if (
-    //   textObject.position.y >= maxPosY ||
-    //   textObject.position.y <= initialYPos
-    // ) {
-    //   directionY *= -1; // Reverse direction
-    // }
-    // if (
-    //   textObject.position.x >= maxPosX ||
-    //   textObject.position.x <= initialXPos
-    // ) {
-    //   directionX *= -1; // Reverse direction
-    // }
-    // textObject.rotation.z += 0.01;
-    // textObject.rotation.x += 0.01;
-    // textObject.rotation.y += 0.01;
-  };
+  textBox.animate = () => {};
 
   return textBox;
 }
