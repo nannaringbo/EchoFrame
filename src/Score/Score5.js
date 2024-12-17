@@ -68,7 +68,7 @@ class Score5 {
 
     toAnimate.push(cube); //Add the cube to the list of objects to animate, to enable continuous rendering
 
-    const cubeWP = new Vector3(-5, 0, -5); //Define the position of the cube in the room, using the Vector3 class from Three.js. The center of the cube, will then be positioned on this vector. For the y-axis: Use groundposition to place on the ground and 0 to place at the height of the users eyes. On the x axis: use -1 to place right in front of the user, numbers below -1 moves it away from the user along the x-axis. On the z-axis: use -1 to place the cube in front of the user, and numbers below -1 moves it further away from the user on teh y-axis. Using the same numbers on the x and z axis, will place the cube along the centerline of the user.
+    const cubeWP = new Vector3(-1, 0, -1); //Define the position of the cube in the room, using the Vector3 class from Three.js. The center of the cube, will then be positioned on this vector. For the y-axis: Use groundposition to place on the ground and 0 to place at the height of the users eyes. On the x axis: use -1 to place right in front of the user, numbers below -1 moves it away from the user along the x-axis. On the z-axis: use -1 to place the cube in front of the user, and numbers below -1 moves it further away from the user on teh y-axis. Using the same numbers on the x and z axis, will place the cube along the centerline of the user.
 
     setWorldPosition(cube, cubeWP); //Set the world position of the cube, to define its position inside the Three.js scene. The world position makes sure that it is placed according to the room dimensions, and should be defined for each object that is added to the scene.
 

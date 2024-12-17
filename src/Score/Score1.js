@@ -3,10 +3,16 @@ import { createScene } from "./components/scene.js";
 import { createControls } from "./systems/controls.js";
 import { createXRRenderer } from "./systems/xrRenderer.js";
 import { createARLights } from "./components/arLights.js";
-import { setWorldPosition } from "./components/worldPosition.js";
-import { createCube } from "./components/cube.js";
 import { createLights } from "./components/light.js";
 import { createPicker } from "./components/picker.js";
+import { setWorldPosition } from "./components/worldPosition.js";
+import { createCube } from "./components/cube.js";
+import { createText } from "./components/text.js";
+import { createLines } from "./components/lines.js";
+import { createFloor } from "./components/floor.js";
+import { createPositionalAudio } from "./components/positionalAudio.js";
+import { createLightballWall } from "./components/lightballWall.js";
+import { createAbsorbParticles } from "./components/absorbParticles.js";
 
 import { Vector3, GridHelper } from "three";
 
@@ -55,25 +61,83 @@ class Score1 {
     //Add functionality for user interactions below:
 
     //Picker
-    const picker = createPicker(scene, camera, renderer, toAnimate);
-    toAnimate.push(picker);
+    // const picker = createPicker(scene, camera, renderer, toAnimate);
+    // toAnimate.push(picker);
 
     //Add 3D objects and the different score elements below:
 
+    //Ground
+    const ground = createFloor(
+      roomWidth,
+      roomDepth,
+      "./assets/textures/JourneyScore_TIFF.tiff"
+    );
+    toAnimate.push(ground);
+    scene.add(ground);
+    //World position
+    const groundWorldPosition = new Vector3(0, groundPosition, 0);
+    setWorldPosition(ground, groundWorldPosition);
+
+    //HeartBeat sound
+    const heartBeat = new createPositionalAudio(
+      camera,
+      "./assets/sound/heartbeat.mp3"
+    );
+    heartBeat.rotateX(-80);
+    toAnimate.push(heartBeat);
+    scene.add(heartBeat);
+    //World position
+    const heartBeatWorldPosition = new Vector3(0, 4, 1);
+    setWorldPosition(heartBeat, heartBeatWorldPosition);
+
+    //Text - INTERNAL
+    const word = "INTERNAL";
+    const text = createText(word, 6, "#4f3300");
+    text.rotateY(0.5);
+    scene.add(text);
+    //World position
+    const textWorldPosition = new Vector3(-4.5, -1, -6.5);
+    setWorldPosition(text, textWorldPosition);
+
+    //Lines
+    const lines = createLines(5, -5, 150, 7); //maximum xyz, minimum xyz, number of lines. USed for the Math.random() function inside createLines
+    toAnimate.push(lines);
+    lines.scale.set(0.3, 0.3, 0.3);
+    scene.add(lines); // Add each line to the scene
+    //World position
+    const linesWorldPosition = new Vector3(0, groundPosition + 1.5, 5.5);
+    setWorldPosition(lines, linesWorldPosition);
+
+    //LightBall
+    const lightBall = createLightballWall();
+    scene.add(lightBall);
+    toAnimate.push(lightBall);
+    //World position
+    const lightBallWorldPosition = new Vector3(-4, groundPosition + 1, 1);
+    setWorldPosition(lightBall, lightBallWorldPosition);
+
+    //Particles
+    const absorbingParticles = createAbsorbParticles(500, 0.01);
+    toAnimate.push(absorbingParticles);
+    scene.add(absorbingParticles);
+    //World position
+    const absorbingParticlesWP = new Vector3(6, groundPosition, -1.3);
+    setWorldPosition(absorbingParticles, absorbingParticlesWP);
+
     //Example of defining and initializing a cube:
 
-    const cube = createCube(0.5, 0.5, 0.5); //Call the createCube function to create a cube
+    // const cube = createCube(0.5, 0.5, 0.5); //Call the createCube function to create a cube
 
-    scene.add(cube); //Add the cube to the Three.js scene
+    // scene.add(cube); //Add the cube to the Three.js scene
 
-    toAnimate.push(cube); //Add the cube to the list of objects to animate, to enable continuous rendering
+    // toAnimate.push(cube); //Add the cube to the list of objects to animate, to enable continuous rendering
 
-    const cubeWP = new Vector3(-5, 0, -5); //Define the position of the cube in the room, using the Vector3 class from Three.js. The center of the cube, will then be positioned on this vector. For the y-axis: Use groundposition to place on the ground and 0 to place at the height of the users eyes. On the x axis: use -1 to place right in front of the user, numbers below -1 moves it away from the user along the x-axis. On the z-axis: use -1 to place the cube in front of the user, and numbers below -1 moves it further away from the user on teh y-axis. Using the same numbers on the x and z axis, will place the cube along the centerline of the user.
+    // const cubeWP = new Vector3(-5, 0, -5); //Define the position of the cube in the room, using the Vector3 class from Three.js. The center of the cube, will then be positioned on this vector. For the y-axis: Use groundposition to place on the ground and 0 to place at the height of the users eyes. On the x axis: use -1 to place right in front of the user, numbers below -1 moves it away from the user along the x-axis. On the z-axis: use -1 to place the cube in front of the user, and numbers below -1 moves it further away from the user on teh y-axis. Using the same numbers on the x and z axis, will place the cube along the centerline of the user.
 
-    setWorldPosition(cube, cubeWP); //Set the world position of the cube, to define its position inside the Three.js scene. The world position makes sure that it is placed according to the room dimensions, and should be defined for each object that is added to the scene.
+    // setWorldPosition(cube, cubeWP); //Set the world position of the cube, to define its position inside the Three.js scene. The world position makes sure that it is placed according to the room dimensions, and should be defined for each object that is added to the scene.
 
-    console.log("cubeWP:", cubeWP);
-    console.log("cube position:", cube.position);
+    // console.log("cubeWP:", cubeWP);
+    // console.log("cube position:", cube.position);
 
     //Helpers that can be used for testing
     const gridHelper = new GridHelper(roomDepth, roomDepth);

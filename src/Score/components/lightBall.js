@@ -14,14 +14,12 @@ import {
   DoubleSide,
 } from "three";
 
-import Stats from "three/examples/jsm/libs/stats.module.js";
-
-function createLightBall() {
-  const geometry = new SphereGeometry(0.3, 12, 6);
+function createLightBall(radius, color, lightIntensity) {
+  const geometry = new SphereGeometry(radius, 12, 6);
 
   //lights
 
-  const lightball = new PointLight("#f0e785", 200, 20);
+  const lightball = new PointLight(color, lightIntensity, 20);
   lightball.castShadow = true;
   lightball.shadow.bias = -0.005; // reduces self-shadowing on double-sided objects
 
@@ -31,7 +29,7 @@ function createLightBall() {
 
   lightball.add(sphere);
 
-  const radius = 0.5;
+  const orbit = 0.5;
   const speed = 0.01;
   let angle = 0;
 
@@ -46,12 +44,11 @@ function createLightBall() {
     angle += speed;
 
     //Orbit movement, relative to the initial worls position of the lightball
-    lightball.position.x = initialWorldPosition.x + radius * Math.cos(angle);
-    lightball.position.z = initialWorldPosition.z + radius * Math.sin(angle);
+    lightball.position.x = initialWorldPosition.x + orbit * Math.cos(angle);
+    lightball.position.z = initialWorldPosition.z + orbit * Math.sin(angle);
 
     //Updating the y position, to also make it move up/down
-    lightball.position.y =
-      initialWorldPosition.y + radius * Math.sin(angle / 2);
+    lightball.position.y = initialWorldPosition.y + orbit * Math.sin(angle / 2);
 
     //rotation around own axises
     lightball.rotateX(speed);

@@ -5,29 +5,24 @@ import {
   ShapeGeometry,
   Mesh,
   Group,
-  BoxGeometry,
-  Vector3,
 } from "three";
 
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js";
-import { setWorldPosition } from "./worldPosition";
 
 function createText(message, fontSize, textcolor) {
-  const geometry = new BoxGeometry(1.8, fontSize / 2, 0.5);
-  const material = new MeshBasicMaterial({
-    color: 0xdaf5ef,
-    transparent: true,
-    opacity: 0.1,
-    side: DoubleSide,
-  });
-  const textBox = new Mesh(geometry, material);
+  const textObject = new Group();
 
   const loader = new FontLoader();
   loader.load(
     "https://threejs.org/examples/fonts/helvetiker_regular.typeface.json",
     function (font) {
       const color = new Color(textcolor);
+
+      const matDark = new MeshBasicMaterial({
+        color: color,
+        side: DoubleSide,
+      });
 
       const matLite = new MeshBasicMaterial({
         color: color,
@@ -40,46 +35,55 @@ function createText(message, fontSize, textcolor) {
 
       const geometry = new ShapeGeometry(shapes);
 
+      geometry.computeBoundingBox();
+
+      const xMid =
+        -0.5 * (geometry.boundingBox.max.x - geometry.boundingBox.min.x);
+
+      geometry.translate(xMid, 0, 0);
       geometry.scale(0.1, 0.1, 0.1);
 
       const text = new Mesh(geometry, matLite);
 
-      // Compute the bounding box of the text geometry
-      text.geometry.computeBoundingBox();
-      const boundingBox = text.geometry.boundingBox;
+      const holeShapes = [];
 
-      // Center the text mesh based on its bounding box
-      text.position.x = -(boundingBox.max.x - boundingBox.min.x) / 2;
-      text.position.y = -(boundingBox.max.y - boundingBox.min.y) / 2;
+      for (let i = 0; i < shapes.length; i++) {
+        const shape = shapes[i];
 
-      textBox.add(text);
+        if (shape.holes && shape.holes.length > 0) {
+          for (let j = 0; j < shape.holes.length; j++) {
+            const hole = shape.holes[j];
+            holeShapes.push(hole);
+          }
+        }
+      }
+
+      shapes.push.apply(shapes, holeShapes);
+
+      const style = SVGLoader.getStrokeStyle(0.2, color.getStyle());
+
+      const strokeText = new Group();
+
+      for (let i = 0; i < shapes.length; i++) {
+        const shape = shapes[i];
+
+        const points = shape.getPoints();
+
+        const geometry = SVGLoader.pointsToStroke(points, style);
+
+        geometry.translate(xMid, 0, 0);
+
+        const strokeMesh = new Mesh(geometry, matDark);
+
+        strokeText.add(strokeMesh);
+      }
+      strokeText.scale.set(0.1, 0.1, 0.1);
+      textObject.add(text);
     }
   );
 
-  textBox.userData.movable = true;
+  textObject.animate = () => {};
 
-  textBox.animate = () => {
-    // // Update the position incrementally
-    // textObject.position.y += 0.02 * directionY;
-    // textObject.position.x += 0.03 * directionX;
-    // // Check for boundaries and reverse direction if needed
-    // if (
-    //   textObject.position.y >= maxPosY ||
-    //   textObject.position.y <= initialYPos
-    // ) {
-    //   directionY *= -1; // Reverse direction
-    // }
-    // if (
-    //   textObject.position.x >= maxPosX ||
-    //   textObject.position.x <= initialXPos
-    // ) {
-    //   directionX *= -1; // Reverse direction
-    // }
-    // textObject.rotation.z += 0.01;
-    // textObject.rotation.x += 0.01;
-    // textObject.rotation.y += 0.01;
-  };
-
-  return textBox;
+  return textObject;
 }
 export { createText };

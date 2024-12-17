@@ -1,202 +1,103 @@
 import { createCamera } from "./components/camera.js";
 import { createScene } from "./components/scene.js";
-import { Resizer } from "./systems/resizer(NOTINUSE).js";
 import { createControls } from "./systems/controls.js";
-import { createText } from "./components/text.js";
 import { createXRRenderer } from "./systems/xrRenderer.js";
-import { createController } from "./components/controller.js";
-import { createFloor } from "./components/floor.js";
 import { createARLights } from "./components/arLights.js";
 import { setWorldPosition } from "./components/worldPosition.js";
 import { createCube } from "./components/cube.js";
-import { createParticles } from "./components/particles.js";
 import { createLights } from "./components/light.js";
 import { createPicker } from "./components/picker.js";
-import { createBox } from "./components/box.js";
-import { createStick } from "./components/stick.js";
-import { createRing } from "./components/ring.js";
-import { createArc } from "./components/arc.js";
 
-import {
-  Vector3,
-  GridHelper,
-  TubeGeometry,
-  MeshBasicMaterial,
-  Mesh,
-  MeshStandardMaterial,
-  Curve,
-  TorusGeometry,
-  SphereGeometry,
-  CylinderGeometry,
-  BoxGeometry,
-} from "three";
-import { createTube } from "./components/tube.js";
+import { Vector3, GridHelper } from "three";
 
 let camera;
 let renderer;
 let scene;
 let toAnimate = [];
-let controller;
 
 class Score2 {
   constructor(container) {
+    //NB: Measurements in Three.js are in meters!
+
+    // Inser height of the user (or use an estimate)
     let userHeight = 1.65;
+
+    // Set the ground position, to make sure that it matches with the users height
     let groundPosition = 0 - userHeight + 0.2;
+
+    //Set the room dimensions - If the AR score will be used in other environments, you can scale the scene to match further down in the code
     let roomWidth = 20;
     let roomDepth = 20;
 
-    console.log("roomDepth:", roomDepth);
+    // Required Three.js components and functionality
     camera = createCamera();
-    console.log("camera movable:", camera.userData.movable);
     scene = createScene();
-    console.log("scene movable:", scene.userData.movable);
-    renderer = createXRRenderer();
-    console.log("scene:", scene);
-
+    renderer = createXRRenderer(); //XR renderer to enable Augmented Reality functionalities
     container.append(renderer.domElement);
     const controls = createControls(camera, renderer.domElement);
-    toAnimate.push(controls);
+    toAnimate.push(controls); //Add controls to the list of objects to animate
+    renderer.setAnimationLoop(render); // set the animation loop
 
-    renderer.setAnimationLoop(render);
+    //Set the starting point of the camera, to adjust the view according to the user (0 on y-axis is an estimated eye height of the user)
+    const startingPoint = new Vector3(1, 0, 1);
+    //camera.position.set(startingPoint.x, startingPoint.y, startingPoint.z);
+    setWorldPosition(camera, startingPoint);
 
-    const startingPoint = new Vector3(0, userHeight - 0.2, 0);
-
-    console.log("roomWidth:", roomWidth);
-    console.log("roomDepth:", roomDepth);
-    console.log("startingPoint:", startingPoint);
-    console.log("groundPosition:", groundPosition);
-    console.log("userHeight:", userHeight);
-    camera.position.set(startingPoint.x, startingPoint.y, startingPoint.z);
-
-    console.log("renderer", renderer);
-
-    //AR lights
+    //AR light - Adapts according to the light in the room (ONLY WORKS WHEN THE SCORE IS RUN IN AR - NOT IN THE BROWSER)
     // const arLight = createARLights(scene, renderer);
     // scene.add(arLight);
     // console.log("arLight movable:", arLight.userData.movable);
 
-    //Lights
+    //Use notmal light, if not interested in using AR Lights
     const lights = createLights();
     scene.add(lights);
 
-    //Define objects
-
-    // const cube = createCube();
-    // scene.add(cube);
-    // toAnimate.push(cube);
-    // const cubeWP = new Vector3(0, groundPosition + userHeight - 0.2, -2);
-    // setWorldPosition(cube, cubeWP);
-    // console.log("cube movable:", cube.userData.movable);
+    //Add functionality for user interactions below:
 
     //Picker
     const picker = createPicker(scene, camera, renderer, toAnimate);
     toAnimate.push(picker);
 
-    //Boxes
+    //Add 3D objects and the different score elements below:
 
-    //Box1
-    const box1 = createBox(0.3, 0.7);
-    const box1WP = new Vector3(
-      6.5,
-      groundPosition + box1.geometry.parameters.height / 2,
-      1
-    );
-    setWorldPosition(box1, box1WP);
-    scene.add(box1);
+    //Example of defining and initializing a cube:
 
-    //Box2
-    const box2 = createBox(0.4, 0.2);
-    const box2WP = new Vector3(
-      7,
-      groundPosition + box2.geometry.parameters.height / 2,
-      -1
-    );
-    setWorldPosition(box2, box2WP);
-    scene.add(box2);
+    const cube = createCube(0.5, 0.5, 0.5); //Call the createCube function to create a cube
 
-    //Box3
-    const box3 = createBox(0.7, 0.5);
-    const box3WP = new Vector3(
-      7.2,
-      groundPosition + box3.geometry.parameters.height / 2,
-      0
-    );
-    setWorldPosition(box3, box3WP);
-    scene.add(box3);
+    scene.add(cube); //Add the cube to the Three.js scene
 
-    //Box4
-    const box4 = createBox(0.7, 0.4);
-    const box4WP = new Vector3(
-      6,
-      groundPosition + box4.geometry.parameters.height / 2,
-      0.1
-    );
-    setWorldPosition(box4, box4WP);
-    scene.add(box4);
+    toAnimate.push(cube); //Add the cube to the list of objects to animate, to enable continuous rendering
 
-    //Stick
+    const cubeWP = new Vector3(-1, 0, -1); //Define the position of the cube in the room, using the Vector3 class from Three.js. The center of the cube, will then be positioned on this vector. For the y-axis: Use groundposition to place on the ground and 0 to place at the height of the users eyes. On the x axis: use -1 to place right in front of the user, numbers below -1 moves it away from the user along the x-axis. On the z-axis: use -1 to place the cube in front of the user, and numbers below -1 moves it further away from the user on teh y-axis. Using the same numbers on the x and z axis, will place the cube along the centerline of the user.
 
-    for (let i = 0; i < 7; i++) {
-      const stick = createStick(0.02, 1.2);
+    setWorldPosition(cube, cubeWP); //Set the world position of the cube, to define its position inside the Three.js scene. The world position makes sure that it is placed according to the room dimensions, and should be defined for each object that is added to the scene.
 
-      const stickWP = new Vector3(
-        1 + i / 7.3,
-        groundPosition + 0.01,
-        3 + i / 11.3
-      );
-      setWorldPosition(stick, stickWP);
-      scene.add(stick);
-    }
+    console.log("cubeWP:", cubeWP);
+    console.log("cube position:", cube.position);
 
-    //Sphere
-    const sphereGeometry = new SphereGeometry(1, 32, 16);
-    const sphereMaterial = new MeshStandardMaterial({ color: 0xb30952 });
-    const sphere = new Mesh(sphereGeometry, sphereMaterial);
-    const sphereWP = new Vector3(-3, groundPosition + 1, -2);
-    setWorldPosition(sphere, sphereWP);
-    scene.add(sphere);
-
-    //Torus Geometry
-    const ring = createRing(0.5, 0.1);
-    const ringWP = new Vector3(-2, groundPosition, 1);
-    setWorldPosition(ring, ringWP);
-    scene.add(ring);
-
-    //Arc
-    const arc = createArc(1.7, 0.6);
-    const arcWP = new Vector3(3, groundPosition, -5);
-    setWorldPosition(arc, arcWP);
-    arc.rotateY(Math.PI / 1.2);
-    scene.add(arc);
-
-    //Tube
-    const tube = createTube(0.5, 2, true);
-    const tubeWP = new Vector3(
-      2,
-      groundPosition + tube.geometry.parameters.height,
-      0
-    );
-    setWorldPosition(tube, tubeWP);
-    scene.add(tube);
-
-    //Helpers
+    //Helpers that can be used for testing
     const gridHelper = new GridHelper(roomDepth, roomDepth);
     gridHelper.position.y = groundPosition;
     scene.add(gridHelper);
+
+    //Set scale of the scene, to match measurements of physical environment
 
     //scene.scale.set(0.5, 0.5, 0.5);
     // console.log("scene:", scene);
     // console.log("ground:", ground);
 
+    //Event listener for resizing the window
     window.addEventListener("resize", onWindowResize);
   }
 }
+//Function to enable resize of the window
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
+//Render function to enable the AnimationLoop. Define a "animate" function for each component that needs to be called inside the AnimationLoop. When the component is initialized in the Score, add each element/object with an animate function to the "toAnimate" array, to make sure it will be rendered continuously inside the animation loop below.
 function render(time) {
   time *= 0.001;
 
