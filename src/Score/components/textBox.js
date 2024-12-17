@@ -55,7 +55,7 @@ function createTextBox(message, fontSize, textcolor) {
       textBox.add(text);
     }
   );
-
+  textBox.scale.set(0.5, 0.5, 0.5);
   textBox.userData.movable = true;
 
   textBox.animate = () => {};

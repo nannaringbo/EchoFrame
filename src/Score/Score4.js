@@ -27,9 +27,9 @@ class Score4 {
     // Set the ground position, to make sure that it matches with the users height
     let groundPosition = 0 - userHeight + 0.2;
 
-    //Set the room dimensions - If the AR score will be used in other environments, you can scale the scene to match further down in the code
-    let roomWidth = 20;
-    let roomDepth = 20;
+    //Set the room dimensions - set room dimensions to fit real world environment
+    let roomWidth = 10;
+    let roomDepth = 10;
 
     // Required Three.js components and functionality
     camera = createCamera();
@@ -54,6 +54,10 @@ class Score4 {
     // const lights = createLights();
     // scene.add(lights);
 
+    //Add functionality for user interactions below:
+    //Picker
+    const picker = createPicker(scene, camera, renderer, toAnimate);
+    toAnimate.push(picker);
     //Add 3D objects and the different score elements below:
 
     //Ground
@@ -76,42 +80,42 @@ class Score4 {
     const word1 = "Fitting In";
     const fittingIn = createTextBox(word1, 2, "black");
     //World position
-    const fittingInWP = new Vector3(3, wordsHeight, -8);
+    const fittingInWP = new Vector3(4, wordsHeight, -4);
     setWorldPosition(fittingIn, fittingInWP);
 
     //"Walking"
     const word2 = "Walking";
     const walking = createTextBox(word2, 2, "black");
     //World position
-    const walkingWP = new Vector3(-12, wordsHeight, -8);
+    const walkingWP = new Vector3(-4, wordsHeight, -4);
     setWorldPosition(walking, walkingWP);
 
     //"Tracing"
     const word3 = "Tracing";
     const tracing = createTextBox(word3, 2, "black");
     //World position
-    const tracingWP = new Vector3(-2, wordsHeight, -8);
+    const tracingWP = new Vector3(2, wordsHeight, -4);
     setWorldPosition(tracing, tracingWP);
 
     //"Treasure Hunt"
     const word6 = "Treasure Hunt";
     const treasureHunt = createTextBox(word6, 2, "black");
     //World position
-    const treasureHuntWP = new Vector3(6, wordsHeight, -8);
+    const treasureHuntWP = new Vector3(6, wordsHeight, -4);
     setWorldPosition(treasureHunt, treasureHuntWP);
 
     //"Frog leap"
     const word7 = "Frog leap";
     const frogLeap = createTextBox(word7, 2, "black");
     //World position
-    const frogLeapWP = new Vector3(-5, wordsHeight, -8);
+    const frogLeapWP = new Vector3(0, wordsHeight, -4);
     setWorldPosition(frogLeap, frogLeapWP);
 
     //"Weaving"
     const word8 = "Weaving";
     const weaving = createTextBox(word8, 2, "black");
     //World position
-    const weavingWP = new Vector3(-9, wordsHeight, -8);
+    const weavingWP = new Vector3(-2, wordsHeight, -4);
     setWorldPosition(weaving, weavingWP);
 
     scene.add(fittingIn, walking, tracing, treasureHunt, frogLeap, weaving);
@@ -128,18 +132,6 @@ class Score4 {
     // const gridHelper = new GridHelper(roomDepth, roomDepth);
     // gridHelper.position.y = groundPosition;
     // scene.add(gridHelper);
-
-    //Add functionality for user interactions below:
-
-    //Set scale of the scene, to match measurements of physical environment
-
-    scene.scale.set(0.25, 0.25, 0.25);
-    // console.log("scene:", scene);
-    // console.log("ground:", ground);
-
-    //Picker
-    const picker = createPicker(scene, camera, renderer, toAnimate);
-    toAnimate.push(picker);
 
     //Event listener for resizing the window
     window.addEventListener("resize", onWindowResize);

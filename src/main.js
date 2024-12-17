@@ -34,11 +34,24 @@ function createLandingPage() {
   // Get a reference to the container element
   const container = document.querySelector("#scene-container");
 
+  const buttonTemplate = Button({
+    text: "Score Template",
+    onClick: () => {
+      const score = new Score(container);
+      buttonTemplate.hidden = true;
+      button1.hidden = true;
+      button2.hidden = true;
+      button3.hidden = true;
+      button4.hidden = true;
+      button5.hidden = true;
+    },
+  });
+
   const button1 = Button({
     text: "Score 1",
     onClick: () => {
       const score = new Score1(container);
-
+      buttonTemplate.hidden = true;
       button1.hidden = true;
       button2.hidden = true;
       button3.hidden = true;
@@ -51,7 +64,7 @@ function createLandingPage() {
     text: "Score 2",
     onClick: () => {
       const score = new Score2(container);
-
+      buttonTemplate.hidden = true;
       button1.hidden = true;
       button2.hidden = true;
       button3.hidden = true;
@@ -64,7 +77,7 @@ function createLandingPage() {
     text: "Score 3",
     onClick: () => {
       const score = new Score3(container);
-
+      buttonTemplate.hidden = true;
       button1.hidden = true;
       button2.hidden = true;
       button3.hidden = true;
@@ -77,7 +90,7 @@ function createLandingPage() {
     text: "Score 4",
     onClick: () => {
       const score = new Score4(container);
-
+      buttonTemplate.hidden = true;
       button1.hidden = true;
       button2.hidden = true;
       button3.hidden = true;
@@ -90,7 +103,7 @@ function createLandingPage() {
     text: "Score 5",
     onClick: () => {
       const score = new Score5(container);
-
+      buttonTemplate.hidden = true;
       button1.hidden = true;
       button2.hidden = true;
       button3.hidden = true;
@@ -98,7 +111,7 @@ function createLandingPage() {
       button5.hidden = true;
     },
   });
-
+  container.appendChild(buttonTemplate);
   container.appendChild(button1);
   container.appendChild(button2);
   container.appendChild(button3);

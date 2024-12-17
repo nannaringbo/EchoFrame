@@ -65,16 +65,10 @@ class Score5 {
     // gridHelper.position.y = groundPosition;
     // scene.add(gridHelper);
 
-    //Set scale of the scene, to match measurements of physical environment
-
-    scene.scale.set(0.25, 0.25, 0.25);
-    // console.log("scene:", scene);
-    // console.log("ground:", ground);
-
     //Add functionality for user interactions below:
 
     //Activator
-    const activator = createActivator(scene, camera, renderer, toAnimate);
+    const activator = createActivator(renderer, particles);
     toAnimate.push(activator);
 
     //Event listener for resizing the window

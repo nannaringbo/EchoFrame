@@ -77,12 +77,6 @@ class Score3 {
     // gridHelper.position.y = groundPosition;
     // scene.add(gridHelper);
 
-    //Set scale of the scene, to match measurements of physical environment
-
-    //scene.scale.set(0.5, 0.5, 0.5);
-    // console.log("scene:", scene);
-    // console.log("ground:", ground);
-
     //Add functionality for user interactions below:
 
     //Event listener for resizing the window

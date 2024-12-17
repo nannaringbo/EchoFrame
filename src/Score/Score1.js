@@ -118,10 +118,6 @@ class Score1 {
     const absorbingParticlesWP = new Vector3(6, groundPosition, -1.3);
     setWorldPosition(absorbingParticles, absorbingParticlesWP);
 
-    scene.scale.set(0.25, 0.25, 0.25);
-    // console.log("scene:", scene);
-    // console.log("ground:", ground);
-
     //Add functionality for user interactions below:
 
     //Event listener for resizing the window

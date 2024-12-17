@@ -1,41 +1,23 @@
-//Component created based on the example from https://threejs.org/manual/#en/webxr-look-to-select
-import { Raycaster } from "three";
-import { createController } from "./controller";
+import { Vector3, Raycaster, BufferGeometry, Line } from "three";
+import { XRControllerModelFactory } from "three/examples/jsm/webxr/XRControllerModelFactory.js";
 
-function createActivator(scene, camera, renderer, toAnimate) {
-  //let controller;
+function createActivator(renderer, particlesGroup) {
+  let controller;
   const raycaster = new Raycaster();
-  let pickedObject = null;
-  let pickedObjectSavedColor;
-  let intersectedObjects = [];
-  const pickPosition = { x: 0, y: 0 };
+  let intersected = [];
 
-  const controller = createController(renderer);
-  scene.add(controller);
+  controller = renderer.xr.getController(0);
   controller.addEventListener("selectstart", onSelectStart);
   controller.addEventListener("selectend", onSelectEnd);
 
-  function pick(scene, camera) {
-    restoreColor(pickedObject, pickedObjectSavedColor);
-    // cast a ray through the frustum
-    raycaster.setFromCamera(pickPosition, camera);
-    // get the list of objects the ray intersected
-    intersectedObjects = raycaster.intersectObjects(scene.children, true);
-    if (intersectedObjects.length > 0) {
-      // pick the first object. It's the closest one
-      pickedObject = intersectedObjects[0].object;
-
-      highlightObject(pickedObject, pickedObjectSavedColor);
-      console.log("pickedObject", pickedObject);
-    }
-    return pickedObject;
-  }
   function onSelectStart(event) {
-    console.log("onSelectStart");
     const controller = event.target;
-    pick(scene, camera);
 
-    if (pickedObject) {
+    const intersections = getIntersections(controller);
+    if (intersections.length > 0) {
+      const intersection = intersections[0];
+      const object = intersection.object;
+
       if (!object.userData.isOn) {
         object.material.opacity = 0.2;
         controller.userData.selected = object;
@@ -50,54 +32,49 @@ function createActivator(scene, camera, renderer, toAnimate) {
   }
 
   function onSelectEnd(event) {
-    console.log("onSelectEnd");
     const controller = event.target;
+
     if (controller.userData.selected !== undefined) {
       const object = controller.userData.selected;
       controller.userData.selected = undefined;
     }
-    controller.userData.selected = undefined;
-    //continues the animation loop of the object, after it has been placed back into the scene
-    if (!toAnimate.includes(pickedObject)) {
-      toAnimate.push(pickedObject); //pushes the object into the animation loop
-      console.log("toAnimate in onSelectEnd", toAnimate);
+  }
+
+  function getIntersections(controller) {
+    controller.updateMatrixWorld();
+    raycaster.setFromCamera({ x: 0, y: 0 }, renderer.xr.getCamera());
+
+    // Perform raycasting with the particles group
+    const movableObjects = raycaster
+      .intersectObjects(particlesGroup.children, true)
+      .filter((intersection) => intersection.object.userData.movable);
+
+    return movableObjects;
+  }
+
+  function intersectObjects() {
+    if (controller.userData.selected !== undefined) return;
+    const intersections = getIntersections(controller);
+
+    if (intersections.length > 0) {
+      const intersection = intersections[0];
+      const object = intersection.object;
+      intersected.push(object);
     }
   }
 
-  raycaster.animate = () => {
-    pick(scene, camera);
-    controller.animate();
+  function resetIntersected() {
+    while (intersected.length) {
+      const object = intersected.pop();
+    }
+  }
+
+  controller.animate = () => {
+    resetIntersected();
+    intersectObjects(controller);
   };
 
-  return raycaster;
+  controller.userData.movable = false;
+  return controller;
 }
-
 export { createActivator };
-
-// restore the color if there is a picked object
-function restoreColor(pickedObject, pickedObjectSavedColor) {
-  if (pickedObject) {
-    if (pickedObject.material && pickedObject.material.emissive) {
-      pickedObject.material.emissive.setHex(pickedObjectSavedColor);
-      pickedObject = null;
-    }
-  }
-}
-
-// save color of pickedObject and highligt it
-function saveObjectColor(pickedObject, pickedObjectSavedColor) {
-  if (pickedObject) {
-    if (pickedObject.material && pickedObject.material.emissive) {
-      pickedObjectSavedColor = pickedObject.material.emissive.getHex();
-    }
-  }
-}
-
-function highlightObject(pickedObject, pickedObjectSavedColor) {
-  if (pickedObject) {
-    if (pickedObject.material && pickedObject.material.emissive) {
-      saveObjectColor(pickedObject, pickedObjectSavedColor);
-      pickedObject.material.emissive.setHex(0xff0000); // Highlight color
-    }
-  }
-}
