@@ -7,6 +7,8 @@ import { setWorldPosition } from "./components/worldPosition.js";
 import { createCube } from "./components/cube.js";
 import { createLights } from "./components/light.js";
 import { createPicker } from "./components/picker.js";
+import { createText } from "./components/text.js";
+import { createFloor } from "./components/floor.js";
 
 import { Vector3, GridHelper } from "three";
 
@@ -60,29 +62,77 @@ class Score2 {
 
     //Add 3D objects and the different score elements below:
 
-    //Example of defining and initializing a cube:
+    //Ground
+    const ground = createFloor(
+      roomWidth,
+      roomDepth - roomDepth / 2.5,
+      "./assets/textures/FloorMap_v2.tiff"
+    );
+    toAnimate.push(ground);
+    scene.add(ground);
+    //World position
+    const groundWP = new Vector3(0, groundPosition, 0);
+    setWorldPosition(ground, groundWP);
 
-    const cube = createCube(0.5, 0.5, 0.5); //Call the createCube function to create a cube
+    //Words
+    const wordsHeight = 0;
 
-    scene.add(cube); //Add the cube to the Three.js scene
+    //"Fitting In"
+    const word1 = "Fitting In";
+    const fittingIn = createText(word1, 2, "black");
+    //World position
+    const fittingInWP = new Vector3(4.5, wordsHeight, 0);
+    setWorldPosition(fittingIn, fittingInWP);
 
-    toAnimate.push(cube); //Add the cube to the list of objects to animate, to enable continuous rendering
+    //"Walking"
+    const word2 = "Walking";
+    const walking = createText(word2, 2, "black");
+    walking.rotateY(Math.PI / 2.5);
+    //World position
+    const walkingWP = new Vector3(-3.5, wordsHeight, 2);
+    setWorldPosition(walking, walkingWP);
 
-    const cubeWP = new Vector3(-1, 0, -1); //Define the position of the cube in the room, using the Vector3 class from Three.js. The center of the cube, will then be positioned on this vector. For the y-axis: Use groundposition to place on the ground and 0 to place at the height of the users eyes. On the x axis: use -1 to place right in front of the user, numbers below -1 moves it away from the user along the x-axis. On the z-axis: use -1 to place the cube in front of the user, and numbers below -1 moves it further away from the user on teh y-axis. Using the same numbers on the x and z axis, will place the cube along the centerline of the user.
+    //"Tracing"
+    const word3 = "Tracing";
+    const tracing = createText(word3, 2, "black");
+    tracing.rotateY(Math.PI / 1.5);
+    //World position
+    const tracingWP = new Vector3(-6.5, wordsHeight, 4);
+    setWorldPosition(tracing, tracingWP);
 
-    setWorldPosition(cube, cubeWP); //Set the world position of the cube, to define its position inside the Three.js scene. The world position makes sure that it is placed according to the room dimensions, and should be defined for each object that is added to the scene.
+    //"Fixed point"
+    const word6 = "Fixed point";
+    const fixedPoint = createText(word6, 2, "black");
+    fixedPoint.rotateY(Math.PI / -4);
+    //World position
+    const fixedPointWP = new Vector3(6, wordsHeight, -5.5);
+    setWorldPosition(fixedPoint, fixedPointWP);
 
-    console.log("cubeWP:", cubeWP);
-    console.log("cube position:", cube.position);
+    //"Frog leap"
+    const word7 = "Frog leap";
+    const frogLeap = createText(word7, 2, "black");
+    //World position
+    const frogLeapWP = new Vector3(-5, wordsHeight, -3);
+    setWorldPosition(frogLeap, frogLeapWP);
+
+    //"Weaving"
+    const word8 = "Weaving";
+    const weaving = createText(word8, 2, "black");
+    weaving.rotateY(Math.PI / -8);
+    //World position
+    const weavingWP = new Vector3(0, wordsHeight, 1.5);
+    setWorldPosition(weaving, weavingWP);
+
+    scene.add(fittingIn, walking, tracing, fixedPoint, frogLeap, weaving);
 
     //Helpers that can be used for testing
-    const gridHelper = new GridHelper(roomDepth, roomDepth);
-    gridHelper.position.y = groundPosition;
-    scene.add(gridHelper);
+    // const gridHelper = new GridHelper(roomDepth, roomDepth);
+    // gridHelper.position.y = groundPosition;
+    // scene.add(gridHelper);
 
     //Set scale of the scene, to match measurements of physical environment
 
-    //scene.scale.set(0.5, 0.5, 0.5);
+    scene.scale.set(0.25, 0.25, 0.25);
     // console.log("scene:", scene);
     // console.log("ground:", ground);
 
