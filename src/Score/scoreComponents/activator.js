@@ -1,3 +1,5 @@
+//Component created based on the example from https://threejs.org/manual/#en/webxr-look-to-select
+
 import { Vector3, Raycaster, BufferGeometry, Line } from "three";
 import { createController } from "./controller";
 
