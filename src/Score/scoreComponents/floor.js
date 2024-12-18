@@ -19,13 +19,16 @@ function createFloor(roomWidth, roomDepth, filePath) {
   groundGeometry.rotateX(-Math.PI / 2);
   const ground = new Mesh(groundGeometry, groundMaterial);
   ground.material.depthTest = false;
+  ground.userData.movable = false;
 
   const scoreFloor = uploadTiff(roomWidth, roomDepth, filePath);
+  scoreFloor.userData.movable = false;
   //scoreFloor.material.depthTest = false;
 
   //floor.add(ground);
   floor.add(scoreFloor);
   floor.userData.movable = false;
+
   floor.animate = () => {};
 
   return floor;

@@ -66,13 +66,14 @@ class Score5 {
     // scene.add(gridHelper);
 
     //Add functionality for user interactions below:
+
     //Picker
     const activator = createActivator(
       scene,
       camera,
       renderer,
-      toAnimate,
-      particles
+      particles,
+      toAnimate
     );
     toAnimate.push(activator);
 

@@ -1,10 +1,10 @@
 import { Vector3, Raycaster, BufferGeometry, Line } from "three";
 import { createController } from "./controller";
 
-function createActivator(scene, camera, renderer, toAnimate, particlesGroup) {
+function createActivator(scene, camera, renderer, groupOfObjects, toAnimate) {
   const raycaster = new Raycaster();
   let pickedObject = null;
-  let pickedObjectSavedColor;
+
   const pickPosition = { x: 0, y: 0 };
 
   let intersectedObjects = [];
@@ -14,15 +14,16 @@ function createActivator(scene, camera, renderer, toAnimate, particlesGroup) {
   controller.addEventListener("selectstart", onSelectStart);
   controller.addEventListener("selectend", onSelectEnd);
 
-  function getIntersections(scene, camera) {
-    // controller.updateMatrixWorld();
+  function getIntersections(groupOfObjects, camera) {
     raycaster.setFromCamera(pickPosition, camera);
 
-    // Perform raycasting with the particles group
-    intersectedObjects = raycaster.intersectObjects(scene.children, true);
+    intersectedObjects = raycaster.intersectObjects(
+      groupOfObjects.children,
+      true
+    );
     if (intersectedObjects.length > 0) {
-      // pick the first object. It's the closest one
       pickedObject = intersectedObjects[0].object;
+      console.log(pickedObject);
     }
     return pickedObject;
   }
@@ -30,54 +31,38 @@ function createActivator(scene, camera, renderer, toAnimate, particlesGroup) {
   function onSelectStart(event) {
     const controller = event.target;
 
-    const object = getIntersections(scene, camera);
+    getIntersections(groupOfObjects, camera);
 
-    if (!object.userData.isOn) {
-      object.material.opacity = 0.2;
-      controller.userData.selected = object;
-      particle.userData.isOn = true;
+    if (toAnimate.includes(pickedObject)) {
+      toAnimate.pop(pickedObject);
+      pickedObject.userData.animates = true;
     }
-    if (object.userData.isOn) {
-      object.material.opacity = 0;
-      controller.userData.selected = object;
-      particle.userData.isOn = false;
+
+    if (pickedObject.userData.isOn === false) {
+      pickedObject.material.opacity = 0.2;
+      pickedObject.userData.isOn = true;
     }
+    //Uncomment the following lines to enable deactivation of the object
+    // else if (pickedObject.userData.isOn === true) {
+    //   pickedObject.material.opacity = 0;
+    //   pickedObject.userData.isOn = false;
+    // }
   }
 
   function onSelectEnd(event) {
     const controller = event.target;
 
-    if (controller.userData.selected !== undefined) {
-      const object = controller.userData.selected;
-      controller.userData.selected = undefined;
+    if (
+      !toAnimate.includes(pickedObject) &&
+      pickedObject.userData.animates == true
+    ) {
+      toAnimate.push(pickedObject);
     }
+    pickedObject = null;
   }
 
-  // function intersectObjects() {
-  //   if (controller.userData.selected !== undefined) return;
-  //   const intersections = getIntersections(controller);
+  raycaster.animate = () => {};
 
-  //   if (intersections.length > 0) {
-  //     const intersection = intersections[0];
-  //     const object = intersection.object;
-  //     intersectedObjects.push(object);
-  //   }
-  // }
-
-  // function resetIntersected() {
-  //   while (intersectedObjects.length) {
-  //     const object = intersectedObjects.pop();
-  //   }
-  // }
-
-  raycaster.animate = () => {
-    getIntersections(scene, camera);
-    controller.animate();
-    //resetIntersected();
-    //intersectObjects(controller);
-  };
-
-  //controller.userData.movable = false;
-  return controller;
+  return raycaster;
 }
 export { createActivator };
