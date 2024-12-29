@@ -1,4 +1,5 @@
-Prerequisites:
+Prerequisites
+-------------------------------------------------------------------------------------------------------------------------------------------
 
 As the AR functionalities in EchoFrame is handled by the WebXR device API, the following is required:
 
@@ -10,9 +11,9 @@ As the AR functionalities in EchoFrame is handled by the WebXR device API, the f
 Some of the AR functionalitites might perform differently (e.g. depth sensing, real world understanding, 3D model rendering), depending on the device.
 
 NOTE: WebXR is not compatible with iOS
--------------------------------------------------------------------------------------------------------------------------------------------
 
-Instructions to run and access EchoFrame:
+Instructions to run and access EchoFrame
+-------------------------------------------------------------------------------------------------------------------------------------------
 There are two ways to access and experience EchoFrame. (1) Through the website, where EchoFrame is hosted or (2) running the code on your device by cloning the GitHub repository.
 
 (1) Website:
@@ -35,9 +36,8 @@ A network server running on your local network, which can be accessed by followi
 
 You will have to use the network server, accessing it from a Chrome browser on an android phone, to enter the AR functionalities. It is not possible to access AR functions on a computer, however, the scores implemented in EchoFrame, can still be seen without AR, showing it as a normal Three.js scene in the web browser. 
 
+Instructions to experience EchoFrame
 -------------------------------------------------------------------------------------------------------------------------------------------
-Instructions to experience EchoFrame:
-
 When you have accessed EchoFrame, either through the hosted website or cloning the repository and run it locally, you can experience the implemented AR scores, by following the steps outlined below:
 
 1. From the landingpage, you can navigate to five different AR scores (Score 1, Score 2, Score 3, Score 4, Score 5), which are described in the thesis (Chapter X, x.x).
