@@ -1,4 +1,5 @@
 Prerequisites:
+
 As the AR functionalities in EchoFrame is handled by the WebXR device API, the following is required:
 
 - An ARCore supported android device (https://developers.google.com/ar/devices#google_play_devices)
