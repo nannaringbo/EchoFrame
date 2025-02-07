@@ -1,5 +1,24 @@
-EchoFrame Instructions
--------------------------------------------------------------------------------------------------------------------------------------------
+# EchoFrame
+Prototype developed as part of my MSc thesis "EchoFrame: Exploring Augmented Reality as a Mediator of Movement Exploration in Dance Practices". 
+
+EchoFrame is a framework for implementing and mediating dance scores in AR (AR scores). The AR scores can be understood as frames for movement exploration that enables embodying different movement concepts. These frames serve as a spatial documentation of the reflections behind an improvisation. 
+
+The aim of EchoFrame was to design a tool for dance improvisation that enables the development of intuitive, spatial and dynamic dance scores. These scores can be continuously interpreted, re-enacted and explored by different bodies, in different contexts and at different times. 
+
+The name, EchoFrame, is inspired by the the concept of an echo chamber and illustrates a conceptual space where movement exploration is repeated due to it being reflected in the frame. The scores in EchoFrame enables movement to persist even after the original exploration has ended.
+
+EchoFrame is Primarily designed for hand-held devices and is developed using the **Three.js** library for creating 3D scenes and **WebXR** for AR rendering.
+
+## Videos of experiencing the scores in augmented reality
+
+
+https://github.com/user-attachments/assets/d2c710ff-ba55-4fa0-85b5-de53f5c50152
+
+https://github.com/user-attachments/assets/f3fee826-826d-4f45-86be-601bc02fd8ce
+
+https://github.com/user-attachments/assets/20010072-230a-417e-973e-7adc2f33fd24
+
+## EchoFrame Instructions
 
 
 Prerequisites
