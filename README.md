@@ -50,22 +50,20 @@ NOTE: Node.js is required.
 2. Open a terminal in the project directory.
 3. Run "npm install" in the terminal, to install all dependencies and dev dependencies.
 4. Run "npm run dev" in the terminal. This will start the following servers:
+   - A local server running on your device, which can be accessed by following the "Local" link specified in the terminal. This is only accessible from the device running the server.
+   - A network server running on your local network, which can be accessed by following the "Network" link specified in the terminal . This is accessible from any device on your local network. 
 
-A local server running on your device, which can be accessed by following the "Local" link specified in the terminal (by default: https://localhost:5173/EchoFrame/). This is only accessible from the device running the server. 
-
-A network server running on your local network, which can be accessed by following the "Network" link specified in the terminal (by default: https://<device-ip-address>:5173/EchoFrame). This is accessible from any device on your local network. 
-
-You will have to use the network server, accessing it from a Chrome browser on an android phone, to enter the AR functionalities. It is not possible to access AR functions on a computer, however, the scores implemented in *EchoFrame*, can still be seen without AR, showing it as a normal Three.js scene in the web browser. 
+You will have to use the network server, accessing it from a Chrome browser on an android phone, to enter the AR experience. It is not possible to access AR functions on a computer, however, the scores implemented in *EchoFrame*, can still be seen without AR, showing it as a normal Three.js scene in the web browser. 
 
 Instructions to experience EchoFrame
 -------------------------------------------------------------------------------------------------------------------------------------------
 When you have accessed *EchoFrame*, either through the hosted website or cloning the repository and run it locally, you can experience the implemented AR scores, by following the steps outlined below:
 
-1. From the landingpage, you can navigate to five different AR scores (Score 1, Score 2, Score 3, Score 4, Score 5), which are described in the thesis (Chapter 4, 4.2.3).
+1. From the landingpage, you can navigate to five different AR scores (Score 1, Score 2, Score 3, Score 4, Score 5).
 
 2. Click on one of the AR scores to begin.
 
-3. Start the AR experience by clicking the "Enter AR"-button at the bottom of the screen. 
+3. Start the AR experience by clicking the "Enter AR" button at the bottom of the screen. 
 
 4. To exit the AR experience, click the cross in the top right corner. 
 
